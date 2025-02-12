@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
 const productController = require('../controllers/productController');
-const orderController = require('../controllers/orderController')
-const auth = require('../middlewares/auth')
+const orderController = require('../controllers/orderController');
+const cartController = require('../controllers/cartController')
+const authentication = require('../middlewares/authentication')
 
 
 module.exports = () => {
