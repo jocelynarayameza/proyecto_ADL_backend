@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/usersController');
+
+const usersController = require('../controllers/usersController');
 const productController = require('../controllers/productController');
 const orderController = require('../controllers/orderController');
 const cartController = require('../controllers/cartController')
@@ -11,10 +12,12 @@ module.exports = () => {
   router.get('/', (req,res) =>{
     res.send('bienvenido')
   })
-
-  // router.get('/usuarios',auth,usersController)
-  // router.post('/usuarios',usersController)
-  // router.post('/login',usuariosController)
+ 
+  // Rutas de Users
+    router.get('/users', function(req,res){usersController.getUsers})
+    router.post('/register',function(req,res){usersController})
+    router.post('/login',function(req,res){usersController})
+  
 
   router.get('*', (req,res) =>{
     res.status(404).send({ msg: "La ruta que intenta consultar no existe" })
@@ -22,5 +25,3 @@ module.exports = () => {
 
   return router
 }
-
-//separar en rutas
