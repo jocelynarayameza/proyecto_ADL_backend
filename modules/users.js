@@ -10,5 +10,3 @@ exports.getUser = async () =>{
     throw new Error("No se pudo obtener usuarios");
   }
 }
-
-module.exports = { getUser }
