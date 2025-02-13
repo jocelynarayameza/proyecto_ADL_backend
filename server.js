@@ -3,6 +3,10 @@ const app = express();
 var cors = require('cors');
 
 const routes = require('./routes/index');
+const userRoutes = require ('./routes/userRoutes')
+const cartRoutes = require('./routes/cartRoutes')
+const orderRoutes = require ('./routes/orderRoutes')
+const productRoutes = require('./routes/productRoutes')
 const errorHandler = require('./middlewares/corsMiddleware')
 
 app.use(cors())
@@ -12,6 +16,11 @@ require('dotenv').config()
 
 
 app.use('/',routes());
+app.use('/users',userRoutes());
+app.use('/cart',cartRoutes());
+app.use('/orders',orderRoutes());
+app.use('/products',productRoutes());
+
 
 
 // app.use(errorHandler);
