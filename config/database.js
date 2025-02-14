@@ -11,10 +11,9 @@ const pool = new Pool({
 
 pool
   .connect()
-  .then(() => console.log("Conectado a la base de datos correctamente"))
+  .then(() => console.log("Conectado a la base de datos correctamente", process.env.DB_PASSWORD, process.env.DB_DATABASE))
   .catch((error) => {
     console.error("Error al conectar con la base de datos:", error.message);
-    process.exit(1);
   });
 
 module.exports = pool;

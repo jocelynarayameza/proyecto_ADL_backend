@@ -7,9 +7,8 @@ const pool = require('../config/database');
 
 exports.getUsers = async(req,res) => {
   try {
-    const { rows } = await pool.query("SELECT * FROM users");
-    return rows
-    
+    const { rows:users} = await pool.query("SELECT * FROM users");
+    res.json(users)  
   } catch (error) {
     res.status(500).send('No se pudo obtener datos')
   }
