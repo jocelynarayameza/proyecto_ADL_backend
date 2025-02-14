@@ -12,6 +12,8 @@ module.exports = (req,res,next)=>{
     try {
       revisarToken= jwt.verify(token,process.env.TOKEN_PWD)
     } catch (error) {
+      console.log(error);
+      
       res.status(401).send("Token invalido")
     }
     
