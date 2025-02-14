@@ -15,9 +15,9 @@ app.use(express.urlencoded({ extendd: true }));
 require('dotenv').config()
 
 
-// app.use('/',routes);
-app.use('/users',userRoutes);
-// app.use('/cart',cartRoutes);
+app.use('/',routes);
+app.use('/usuarios',userRoutes);
+app.use('/carrito',cartRoutes);
 // app.use('/orders',orderRoutes);
 // app.use('/products',productRoutes);
 
