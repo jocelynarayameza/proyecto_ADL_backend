@@ -9,3 +9,4 @@ router.get('/:id', productController.getProductByIdController)
 router.get('/mis-productos', authentication, productController.getMyProductsController)
 
 module.exports = router
+

@@ -5,8 +5,7 @@ const cartController = require('../controllers/cartController')
 const authentication = require('../middlewares/authentication')
 
 
-module.exports = () => {
+router.get("/", authentication, cartController.getCarts)
+router.post("/comprar", authentication, cartController.buyProducts)
 
-
-  return router
-}
+module.exports = router;

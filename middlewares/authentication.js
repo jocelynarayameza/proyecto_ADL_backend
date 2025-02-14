@@ -13,6 +13,8 @@ module.exports = (req,res,next)=>{
       revisarToken= jwt.verify(token,process.env.TOKEN_PWD)
       req.user=revisarToken;
     } catch (error) {
+      console.log(error);
+      
       res.status(401).send("Token invalido")
     }
     

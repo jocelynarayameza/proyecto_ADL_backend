@@ -1,4 +1,4 @@
-//manejo de erroresconst cors = require("cors");
+// const cors = require("cors");
 
 // const corsMiddleware = cors({
 //   origin: "*", // Permitir todas las solicitudes (ajústalo según sea necesario)
