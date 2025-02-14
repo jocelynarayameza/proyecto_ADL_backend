@@ -11,6 +11,7 @@ module.exports = (req,res,next)=>{
 
     try {
       revisarToken= jwt.verify(token,process.env.TOKEN_PWD)
+      req.user=revisarToken;
     } catch (error) {
       console.log(error);
       
