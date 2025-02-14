@@ -4,9 +4,3 @@ const router = express.Router();
 const productController = require('../controllers/productController');
 const authentication = require('../middlewares/authentication')
 
-
-module.exports = () => {
-
-
-  return router
-}
