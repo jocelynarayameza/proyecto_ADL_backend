@@ -6,6 +6,8 @@ const { getUser, registerUser, loginUser } = require('../modules/users')
 
 exports.getUsers = async(req,res) => {
   try {
+    console.log(req);
+    
     const user = await getUser(req);
     res.status(200).send(user);
 
@@ -16,12 +18,32 @@ exports.getUsers = async(req,res) => {
 
 exports.registerUsers = async(req,res) => {
   try {
-    let {username, name, lastname, email, password, birthday} = req.body;
-    password = await bcrypt.hash(password,12)
-    await registerUser(username, name, lastname, email, password, birthday);
-    req.status(201).send({msg:'Registrado satisfactoriamente'})
+    let emailConfirm = false;
+    let passConfirm = false;
+
+    let {username, name, lastname, email, password, birthday, password_confirm, email_confirm} = req.body;
+
+    if(password==password_confirm){
+      passConfirm = true;
+    } else{
+      res.status(409).json({msg:'Las contraseñas no coinciden'})
+    }
+
+    if(email==email_confirm){
+      emailConfirm = true;
+    } else{
+      res.status(409).json({msg:'Los emails no coinciden'})
+    }
+
+    if(emailConfirm && passConfirm){
+      password = await bcrypt.hash(password,12)
+      await registerUser(username, name, lastname, email, password, birthday);
+      res.status(201).send({msg:'Registrado satisfactoriamente'})
+    }
 
   } catch (error) {
+    console.log(error);
+    
     throw new Error("El usuario ya existe");
   }
 }
@@ -53,6 +75,8 @@ exports.loginUsers = async(req,res) =>{
     }
 
   } catch (error) {
+    console.log(error);
+    
     res.status(500).send("Fallo la autentificacion")
   }
 }
