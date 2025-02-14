@@ -6,20 +6,20 @@ const routes = require('./routes/index');
 const userRoutes = require ('./routes/userRoutes')
 const cartRoutes = require('./routes/cartRoutes')
 const orderRoutes = require ('./routes/orderRoutes')
-const productRoutes = require('./routes/productRoutes')
+const productRoutes = require('./routes/productRoutes.js')
 const errorHandler = require('./middlewares/corsMiddleware')
 
 app.use(cors())
 app.use(express.json());
-app.use(express.urlencoded({ extendd: true }));
+app.use(express.urlencoded({ extended: true }));
 require('dotenv').config()
 
+// app.use('/',routes);
+// app.use('/users',userRoutes);
+// app.use('/cart',cartRoutes);
+// app.use('/orders',orderRoutes);
+app.use('/api/products', productRoutes);
 
-app.use('/',routes());
-app.use('/users',userRoutes());
-app.use('/cart',cartRoutes());
-app.use('/orders',orderRoutes());
-app.use('/products',productRoutes());
 
 
 
