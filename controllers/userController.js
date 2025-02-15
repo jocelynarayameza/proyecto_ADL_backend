@@ -7,8 +7,6 @@ const { passEmailConfirm,emailValid } = require('../middlewares/validation');
 
 exports.getUsers = async(req,res) => {
   try {
-    console.log(req);
-    
     const user = await getUser(req);
     res.status(200).send(user);
 
@@ -20,13 +18,8 @@ exports.getUsers = async(req,res) => {
 exports.registerUsers = async(req,res) => {
   try {
     let {username, name, lastname, email, password, birthday, password_confirm, email_confirm} = req.body;
-
-    const passEmailC = passEmailConfirm(email,email_confirm, password, password_confirm);
-    console.log("PEC",passEmailC);
-    
+    const passEmailC = passEmailConfirm(email,email_confirm, password, password_confirm);  
     const emailV = await emailValid(email);
-    console.log("EV",emailV);
-    
 
     if(passEmailC==true && emailV===true){
       password = await bcrypt.hash(password,12)
@@ -39,7 +32,6 @@ exports.registerUsers = async(req,res) => {
 
   } catch (error) {
     res.status(409).json({msg:'Error al registrar nuevo usuario'})
-    
   }
 }
 
@@ -70,15 +62,13 @@ exports.loginUsers = async(req,res) =>{
     }
 
   } catch (error) {
-    console.log(error);
-    
     res.status(500).json({msg:"Fallo la autentificacion"})
   }
 }
 
 exports.logout = async(req,res) =>{
   try {
-    
+
   } catch (error) {
     
   }

@@ -4,22 +4,13 @@ exports.emailValid = async (email) =>{
   try {
     const { rows } = await pool.query('SELECT EXISTS(SELECT * FROM users WHERE email=$1)',[email])
 
-
     if(rows[0].exists===true){
-      console.log('pasa por aca');
-
       return !rows[0].exists
       
     } else if (rows[0].exists===false) {
-      console.log('o por aca');
-
       return !rows[0].exists
     }
-    
-   
-    
-    
-    
+
   } catch (error) {
     throw new Error("Error al validar el email");
   }
