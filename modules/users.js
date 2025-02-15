@@ -11,7 +11,6 @@ exports.getUser = async (req,res) =>{
     console.log(users[0]);
     
     return users[0]
-    // res.json(users[0])  
 
   } catch (error) {
     console.log("1",error);
@@ -26,8 +25,8 @@ exports.registerUser = async ( username, name, lastname, email, password, birthd
     
     const postgresData = 'INSERT INTO users(username, name, lastname, email, password, birthday,address) VALUES ($1,$2,$3,$4,$5,$6,$7)';
     const values = [username, name, lastname, email, password, birthday, address]
-    const result = await pool.query(postgresData,values)
-    return result.rows[0]
+    const {rows} = await pool.query(postgresData,values)
+    return rows[0]
 
   } catch (error) {
     console.log(error);
@@ -38,15 +37,9 @@ exports.registerUser = async ( username, name, lastname, email, password, birthd
 
 exports.loginUser = async (email) => {
   try {
-    const SQLQuery = 'SELECT * FROM users WHERE email=$1';
+    const { rows } = await pool.query('SELECT * FROM users WHERE email=$1',[email])
 
-    console.log(SQLQuery);
-    
-    const SQLValues = [email]
-    const result = await pool.query(SQLQuery,SQLValues)
-    console.log(result);
-    
-    return result.rows[0];
+    return rows[0];
 
   } catch (error) {
     throw new Error('Error al autenticar el usuario')

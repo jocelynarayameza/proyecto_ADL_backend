@@ -2,7 +2,8 @@ const bcrypt = require('bcrypt')
 const jwt= require('jsonwebtoken');
 require('dotenv').config();
 
-const { getUser, registerUser, loginUser } = require('../modules/users')
+const { getUser, registerUser, loginUser } = require('../modules/users');
+const { passEmailConfirm,emailValid } = require('../middlewares/validation');
 
 exports.getUsers = async(req,res) => {
   try {
@@ -12,39 +13,33 @@ exports.getUsers = async(req,res) => {
     res.status(200).send(user);
 
   } catch (error) {
-    res.status(500).send({msg:'No se pudo obtener datos'});
+    res.status(500).json({msg:'No se pudo obtener datos'});
   }
 };
 
 exports.registerUsers = async(req,res) => {
   try {
-    let emailConfirm = false;
-    let passConfirm = false;
-
     let {username, name, lastname, email, password, birthday, password_confirm, email_confirm} = req.body;
 
-    if(password==password_confirm){
-      passConfirm = true;
-    } else{
-      res.status(409).json({msg:'Las contraseñas no coinciden'})
-    }
+    const passEmailC = passEmailConfirm(email,email_confirm, password, password_confirm);
+    console.log("PEC",passEmailC);
+    
+    const emailV = await emailValid(email);
+    console.log("EV",emailV);
+    
 
-    if(email==email_confirm){
-      emailConfirm = true;
-    } else{
-      res.status(409).json({msg:'Los emails no coinciden'})
-    }
-
-    if(emailConfirm && passConfirm){
+    if(passEmailC==true && emailV===true){
       password = await bcrypt.hash(password,12)
       await registerUser(username, name, lastname, email, password, birthday);
-      res.status(201).send({msg:'Registrado satisfactoriamente'})
+      res.status(201).json({msg:'Registrado satisfactoriamente'})
+
+    } else if (passEmailC==true && emailV===false){
+      res.status(409).json({msg:'El email ocupado ya esta asociado a otro usuario'})
     }
 
   } catch (error) {
-    console.log(error);
+    res.status(409).json({msg:'Error al registrar nuevo usuario'})
     
-    throw new Error("El usuario ya existe");
   }
 }
 
@@ -77,7 +72,7 @@ exports.loginUsers = async(req,res) =>{
   } catch (error) {
     console.log(error);
     
-    res.status(500).send("Fallo la autentificacion")
+    res.status(500).json({msg:"Fallo la autentificacion"})
   }
 }
 
