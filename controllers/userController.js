@@ -3,7 +3,7 @@ const jwt= require('jsonwebtoken');
 require('dotenv').config();
 
 const { getUser, registerUser, loginUser } = require('../modules/users');
-const { passEmailConfirm,emailValid } = require('../middlewares/validation');
+const { passEmailConfirm, emailValid, usernameValid } = require('../middlewares/validation');
 
 exports.getUsers = async(req,res) => {
   try {
@@ -18,16 +18,26 @@ exports.getUsers = async(req,res) => {
 exports.registerUsers = async(req,res) => {
   try {
     let {username, name, lastname, email, password, birthday, password_confirm, email_confirm} = req.body;
-    const passEmailC = passEmailConfirm(email,email_confirm, password, password_confirm);  
+    const passEmailC = passEmailConfirm(email,email_confirm, password, password_confirm); 
+    const usernameV = await usernameValid(username);
     const emailV = await emailValid(email);
 
-    if(passEmailC==true && emailV===true){
+    if(passEmailC && emailV && usernameV){
       password = await bcrypt.hash(password,12)
       await registerUser(username, name, lastname, email, password, birthday);
-      res.status(201).json({msg:'Registrado satisfactoriamente'})
+      res.status(201).json({msg:'Usuario registrado satisfactoriamente'})
 
-    } else if (passEmailC==true && emailV===false){
-      res.status(409).json({msg:'El email ocupado ya esta asociado a otro usuario'})
+    } else if (passEmailC && !emailV && usernameV){
+      res.status(409).json({msg:'El email ya esta en uso'})
+
+    } else if (passEmailC && emailV && !usernameV){
+      res.status(409).json({msg:'El usuario ya esta en uso'})
+
+    } else if (!passEmailC){
+      res.status(409).json({msg:'La contrasena o el email de confirmacion no son iguales'})
+
+    } else if (passEmailC && !emailV && !usernameV) {
+      res.status(409).json({msg:'El usuario y el email ya estan en uso'})
     }
 
   } catch (error) {

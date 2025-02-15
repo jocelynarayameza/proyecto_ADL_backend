@@ -15,6 +15,21 @@ exports.emailValid = async (email) =>{
     throw new Error("Error al validar el email");
   }
 }
+exports.usernameValid = async (username) =>{
+  try {
+    const { rows } = await pool.query('SELECT EXISTS(SELECT * FROM users WHERE username=$1)',[username])
+
+    if(rows[0].exists===true){
+      return !rows[0].exists
+      
+    } else if (rows[0].exists===false) {
+      return !rows[0].exists
+    }
+
+  } catch (error) {
+    throw new Error("Error al validar el usuario");
+  }
+}
 
 exports.passEmailConfirm = (email,email_confirm, password, password_confirm) =>{
   try {

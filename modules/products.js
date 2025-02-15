@@ -42,4 +42,12 @@ exports.getProductById = async (id) =>{
   }
 
 
+exports.newProduct = async (product_name, product_description, product_price, product_quantity, product_photo, product_category, id_user,fullName ) =>{
+  const seller = id_user
+  const seller_name = fullName
+  const postgresData = 'INSERT INTO products(product_name, product_description, product_price, product_quantity, product_photo, product_category, seller, seller_name) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)';
+  const values = [product_name, product_description, product_price, product_quantity, product_photo, product_category, seller, seller_name]
+  const {rows} = await pool.query(postgresData,values)
 
+  return rows[0]
+}

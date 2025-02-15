@@ -19,7 +19,7 @@ exports.getUser = async (req,res) =>{
   }
 }
 
-exports.registerUser = async ( username, name, lastname, email, password, birthday ) => {
+exports.registerUser = async ( username, name, lastname, email, password, birthday) => {
   try {
     const address = 'No se registra dirección';
     
