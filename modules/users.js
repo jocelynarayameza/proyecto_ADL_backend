@@ -7,14 +7,10 @@ exports.getUser = async (req,res) =>{
     const token = Authorization.split("Bearer ")[1]
     const {email} = jwt.decode(token)
 
-    const { rows:users} = await pool.query("SELECT * FROM users WHERE email=$1",[email]);
-    console.log(users[0]);
-    
+    const { rows:users} = await pool.query("SELECT * FROM users WHERE email=$1",[email]); 
     return users[0]
 
   } catch (error) {
-    console.log("1",error);
-    
     throw new Error('Error al obtener el usuario');
   }
 }
@@ -44,3 +40,44 @@ exports.loginUser = async (email) => {
     throw new Error('Error al autenticar el usuario')
   }
 }
+
+exports.editUser = async (id_user, email, name, lastname, password) => {
+  try {
+    const query = 'UPDATE users SET email = $1, name = $2, lastname = $3, password = $4 WHERE id_user = $5';
+    const values = [ email, name, lastname, password, id_user ];
+    const { rows } = await pool.query(query,values)
+    
+    return rows
+  } catch (error) {
+    throw new Error("No se pudo modificar el usuario");
+    
+    
+  }
+
+}
+
+exports.editAddressUser = async (id_user,address) => {
+  try {  
+    const { rows } = await pool.query('UPDATE users SET address = $1 WHERE id_user = $2',[address,id_user])
+    return rows
+
+  } catch (error) {
+    throw new Error("No se pudo modificar el usuario");
+  }
+}
+
+// exports.deleteUser = async(id_user) => {
+//   const { rows: products } = await pool.query('DELETE FROM products WHERE seller = $1',[id_user])
+
+
+//   const { rows: cart } = await pool.query('DELETE FROM cart WHERE user_id = $1',[id_user])
+
+//   const { rows: orders } = await pool.query('SELECT * FROM orders WHERE order_user = $1',[id_user])
+
+//   for (order_row in orders){
+//     const { orders } = await pool.query('DELETE * FROM order_details WHERE order_id = $1',[order_row])}
+
+//   const { rows: finalorders } = await pool.query('DELETE FROM orders WHERE user_id = $1',[id_user])
+
+//   const { rows: user } = await pool.query('DELETE FROM users WHERE id_user = $1',[id_user])
+// }

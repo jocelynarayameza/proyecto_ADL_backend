@@ -56,3 +56,9 @@ exports.passEmailConfirm = (email,email_confirm, password, password_confirm) =>{
   }
 
 }
+
+exports.inputEmpty = (value) =>{
+  if(value.length!=0){
+    return true
+  }
+}

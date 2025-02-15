@@ -36,12 +36,15 @@ exports.getProductByIdController = async (req, res) => {
   }
 
   exports.newProductController = async (req,res) => {
+    try {
+      const {id_user} = await getUser(req)
+      
+      let { product_name, product_description, product_price, product_quantity, product_photo, product_category } = req.body
+      await newProduct(product_name, product_description, product_price, product_quantity, product_photo, product_category, id_user)
+      res.status(201).json({msg:'Producto registrado satisfactoriamente'})
 
-    const {id_user, name, lastname} = await getUser(req)
-    const fullName = name +" "+ lastname
-    console.log(fullName);
+    } catch (error) {
+       res.status(400).json({msg:"Fallo el agregar un nuevo producto"})
+    }
     
-    let { product_name, product_description, product_price, product_quantity, product_photo, product_category } = req.body
-    await newProduct(product_name, product_description, product_price, product_quantity, product_photo, product_category, id_user, fullName)
-    res.status(201).json({msg:'Producto registrado satisfactoriamente'})
   }
