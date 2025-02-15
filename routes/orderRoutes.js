@@ -5,8 +5,3 @@ const orderController = require('../controllers/orderController');
 const authentication = require('../middlewares/authentication')
 
 
-module.exports = () => {
-
-
-  return router
-}
