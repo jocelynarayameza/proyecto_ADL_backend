@@ -93,8 +93,7 @@ exports.editUsers = async (req,res) =>{
     let { id_user, email, password, name, lastname } = await getUser(req)
     let { nameChange, lastnameChange, passwordChange, emailChange} = req.body;
 
-    const passwordC = await bcrypt.compare(passwordChange, password)
-    console.log(passwordC);
+    const passwordC = await bcrypt.compare(passwordChange, password);
     
     if( inputEmpty(emailChange) && email != emailChange ){
       email = emailChange;
@@ -127,13 +126,11 @@ exports.editUsers = async (req,res) =>{
       res.status(409).json({msg:"Contraseña es la misma que tenía antes"})
     }
 
-
     await editUser(id_user, email, name, lastname, password)
     res.status(200).json({msg:"El usuario se modificó con éxito"})
 
   } catch (error) {
     res.status(401).json({msg:'No se pudo modificar el usuario'})
-    
   }
 }
 
