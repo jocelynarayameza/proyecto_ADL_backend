@@ -10,16 +10,12 @@ module.exports = async (req,res,next)=>{
     const token = authHeader.split(" ")[1];
     let revisarToken;
     let tokenVerify = false;
+    
     try {
       let tokenid= await tokenIDSearch(token);
-      console.log("1", tokenid);
       revisarToken= jwt.verify(token,process.env.TOKEN_PWD)
       req.user=revisarToken;
       let {jti} = jwt.decode(token)
-      console.log(jwt.decode(token));
-      
-      console.log("2", jti);
-      
       
       if(tokenid==jti){
          tokenVerify = true;
@@ -28,19 +24,18 @@ module.exports = async (req,res,next)=>{
       }
 
     } catch (error) {
-      console.log(error);
-      
       res.status(401).send("Token invalido")
     }
     
     if(!revisarToken){
       res.status(401).send("No autenticado")
     }
+
     if(!tokenVerify){
       res.status(401).send("No autenticado")
     }
+
     if(revisarToken && tokenVerify){
       next()
     }
-    
 }
