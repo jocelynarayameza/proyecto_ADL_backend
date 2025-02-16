@@ -6,7 +6,8 @@ const { getCart } = require('../modules/cart')
 
 exports.getCarts = async(req,res) =>{
   try {
-    const cart= await getCart(req);
+    let { id_user } = await getUser(req);
+    const cart = await getCart(id_user)
     res.status(200).send(cart);
 
   } catch (error) {
@@ -14,8 +15,20 @@ exports.getCarts = async(req,res) =>{
   }
 }
 
-exports.buyProducts = async(req,res) =>{
+exports.buyProductsToOrders = async(req,res) =>{
   try {
+    let { id_user } = await getUser(req);
+  } catch (error) {
+    
+  }
+}
+
+exports.addProductsToCart = async(req,res) =>{
+  try {
+    let { id_user } = await getUser(req);
+    const { id_product } = req.body
+    const addProductToCart(id_user,id_product)
+    res.status(200).send(cart);
     
   } catch (error) {
     
