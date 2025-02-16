@@ -19,9 +19,9 @@ exports.registerUser = async ( username, name, lastname, email, password, birthd
   try {
     const address = 'No se registra dirección';
     
-    const postgresData = 'INSERT INTO users(username, name, lastname, email, password, birthday,address) VALUES ($1,$2,$3,$4,$5,$6,$7)';
+    const query = 'INSERT INTO users(username, name, lastname, email, password, birthday,address) VALUES ($1,$2,$3,$4,$5,$6,$7)';
     const values = [username, name, lastname, email, password, birthday, address]
-    const {rows} = await pool.query(postgresData,values)
+    const {rows} = await pool.query(query,values)
     return rows[0]
 
   } catch (error) {
@@ -82,7 +82,7 @@ exports.tokenIDRemove = async(token) =>{
   const tokenDecode = jwt.decode(token)
   let { email } = tokenDecode
   
-  const { rows } = await pool.query('DELETE tokenid FROM users WHERE id_user = $1',[email]);
+  const { rows } = await pool.query('UPDATE users set tokenid = null WHERE email = $1',[email]);
   
   return rows
 }

@@ -79,7 +79,7 @@ exports.loginUsers = async(req,res) =>{
         await tokenIDAdd(token);
       }
     }
-    res.status(201).json({msg:'Usuario logueado satisfactoriamente'})
+    res.status(200).json({msg:'Autentificacion correcta','token':token})
 
   } catch (error) {   
     res.status(500).json({msg:"Fallo la autentificación"})
