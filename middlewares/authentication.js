@@ -39,5 +39,8 @@ module.exports = async (req,res,next)=>{
     if(!tokenVerify){
       res.status(401).send("No autenticado")
     }
-    next()
+    if(revisarToken && tokenVerify){
+      next()
+    }
+    
 }

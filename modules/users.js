@@ -15,6 +15,8 @@ exports.getUser = async (req,res) =>{
   }
 }
 
+
+
 exports.registerUser = async ( username, name, lastname, email, password, birthday) => {
   try {
     const address = 'No se registra dirección';
@@ -39,6 +41,8 @@ exports.loginUser = async (email) => {
   }
 }
 
+
+
 exports.editUser = async (id_user, email, name, lastname, password) => {
   try {
     const query = 'UPDATE users SET email = $1, name = $2, lastname = $3, password = $4 WHERE id_user = $5';
@@ -47,9 +51,11 @@ exports.editUser = async (id_user, email, name, lastname, password) => {
     
     return rows
   } catch (error) {
-    throw new Error("No se pudo modificar el usuario");
+    throw new Error("Error al modificar el usuario");
   }
 }
+
+
 
 exports.editAddressUser = async (id_user,address) => {
   try {  
@@ -57,32 +63,48 @@ exports.editAddressUser = async (id_user,address) => {
     return rows
 
   } catch (error) {
-    throw new Error("No se pudo modificar el usuario");
+    throw new Error("Error al modificar la direccion del usuario");
   }
 }
 
+
+
 exports.tokenIDAdd = async(token) =>{
-  let {email, jti} = jwt.decode(token)
-  
-  const { rows} = await pool.query('UPDATE users SET tokenid = $1 WHERE email = $2',[jti,email]);
-  
-  return rows
+  try {
+    let {email, jti} = jwt.decode(token)
+    const { rows} = await pool.query('UPDATE users SET tokenid = $1 WHERE email = $2',[jti,email]);
+    return rows
+    
+  } catch (error) {
+    throw new Error("Error al añadir el tokenID al usuario");
+  }
 }
 
+
+
 exports.tokenIDSearch = async(token) => {
-  let {email} = jwt.decode(token)
-  
-  const { rows:tokenid } = await pool.query('SELECT tokenid FROM users WHERE email = $1',[email]);  
-  
-  return tokenid[0].tokenid
+  try {
+    let {email} = jwt.decode(token)
+    const { rows:tokenid } = await pool.query('SELECT tokenid FROM users WHERE email = $1',[email]);  
+    return tokenid[0].tokenid
+
+  } catch (error) {
+    throw new Error("Error al buscar el token ID del usuario");
+  }
 }
+
+
+
 exports.tokenIDRemove = async(token) =>{
-  const tokenDecode = jwt.decode(token)
-  let { email } = tokenDecode
-  
-  const { rows } = await pool.query('UPDATE users set tokenid = null WHERE email = $1',[email]);
-  
-  return rows
+  try {
+    let { email } = jwt.decode(token)
+    const { rows } = await pool.query('UPDATE users set tokenid = null WHERE email = $1',[email]);
+    return rows
+
+  } catch (error) {
+    throw new Error("Error al eliminar el token ID del usuario");
+  }
+
 }
 
 // exports.deleteUser = async(id_user) => {

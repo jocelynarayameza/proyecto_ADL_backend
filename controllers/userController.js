@@ -14,8 +14,6 @@ exports.getUsers = async(req,res) => {
     res.status(200).send(user);
 
   } catch (error) {
-    console.log(error);
-    
     res.status(500).json({msg:'No se pudo obtener datos'});
   }
 };
@@ -48,7 +46,7 @@ exports.registerUsers = async(req,res) => {
     }
 
   } catch (error) {
-    res.status(409).json({msg:'Error al registrar nuevo usuario'})
+    res.status(409).json({msg:'No se pudo registrar nuevo usuario'})
   }
 }
 
@@ -83,11 +81,8 @@ exports.loginUsers = async(req,res) =>{
       }
     }
     
-
-  } catch (error) {   
-    console.log(error);
-    
-    res.status(500).json({msg:"Fallo la autentificación"})
+  } catch (error) {  
+    res.status(500).json({msg:"No se pudo autenticar"})
   }
 }
 
@@ -137,7 +132,7 @@ exports.editUsers = async (req,res) =>{
     res.status(200).json({msg:"El usuario se modificó con éxito"})
 
   } catch (error) {
-    res.status(401).json({msg:'Error al modificar el usuario'})
+    res.status(401).json({msg:'No se pudo modificar el usuario'})
     
   }
 }
@@ -160,9 +155,24 @@ exports.editAddressUsers = async (req,res) =>{
     res.status(200).json({msg:"La dirección se modificó con éxito"})
 
   } catch (error) {
-    res.status(401).json({msg:'Error al modificar la dirección'})
+    res.status(400).json({msg:'No se pudo modificar la dirección del usuario'})
   }
 }
+
+
+
+exports.logout = async(req,res) =>{
+  try {
+    const Authorization = req.header("Authorization")
+    const token = Authorization.split("Bearer ")[1]
+    await tokenIDRemove(token)
+    res.status(200).json({msg:"El usuario se deslogueó con éxito"})
+
+  } catch (error) {
+    res.status(401).json({msg:'No se pudo desloguear al usuario'})
+}}
+
+
 
 // exports.deleteUsers = async(req,res) => {
 //   try {
@@ -178,16 +188,4 @@ exports.editAddressUsers = async (req,res) =>{
     
 //   }
 
-// }
-
-
-// exports.logout = async(req,res) =>{
-//   // try {
-//     const Authorization = req.header("Authorization")
-//     const token = Authorization.split("Bearer ")[1]
-//     await tokenIDRemove(token)
-//     res.status(200).json({msg:"El usuario se deslogueó con éxito"})
-//   // } catch (error) {
-    
-//   // }
 // }
