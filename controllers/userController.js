@@ -14,6 +14,8 @@ exports.getUsers = async(req,res) => {
     res.status(200).send(user);
 
   } catch (error) {
+    console.log(error);
+    
     res.status(500).json({msg:'No se pudo obtener datos'});
   }
 };
@@ -77,11 +79,14 @@ exports.loginUsers = async(req,res) =>{
             {jwtid: crypto.randomUUID().toString() }
         )
         await tokenIDAdd(token);
+        res.status(200).json({msg:'Autentificacion correcta','token':token})
       }
     }
-    res.status(200).json({msg:'Autentificacion correcta','token':token})
+    
 
   } catch (error) {   
+    console.log(error);
+    
     res.status(500).json({msg:"Fallo la autentificación"})
   }
 }
@@ -176,13 +181,13 @@ exports.editAddressUsers = async (req,res) =>{
 // }
 
 
-exports.logout = async(req,res) =>{
-  // try {
-    const Authorization = req.header("Authorization")
-    const token = Authorization.split("Bearer ")[1]
-    await tokenIDRemove(token)
-    res.status(200).json({msg:"El usuario se deslogueó con éxito"})
-  // } catch (error) {
+// exports.logout = async(req,res) =>{
+//   // try {
+//     const Authorization = req.header("Authorization")
+//     const token = Authorization.split("Bearer ")[1]
+//     await tokenIDRemove(token)
+//     res.status(200).json({msg:"El usuario se deslogueó con éxito"})
+//   // } catch (error) {
     
-  // }
-}
+//   // }
+// }

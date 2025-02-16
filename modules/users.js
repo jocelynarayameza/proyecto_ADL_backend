@@ -72,11 +72,9 @@ exports.tokenIDAdd = async(token) =>{
 exports.tokenIDSearch = async(token) => {
   let {email} = jwt.decode(token)
   
-  const { rows:tokenid } = await pool.query('SELECT tokenid FROM users WHERE email = $1',[email]);
-  console.log("Search", tokenid);
+  const { rows:tokenid } = await pool.query('SELECT tokenid FROM users WHERE email = $1',[email]);  
   
-  
-  return tokenid
+  return tokenid[0].tokenid
 }
 exports.tokenIDRemove = async(token) =>{
   const tokenDecode = jwt.decode(token)
