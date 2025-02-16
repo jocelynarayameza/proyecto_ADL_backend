@@ -25,8 +25,6 @@ exports.registerUser = async ( username, name, lastname, email, password, birthd
     return rows[0]
 
   } catch (error) {
-    console.log(error);
-    
     throw new Error('Error al crear el usuario')
   }
 }
@@ -50,10 +48,7 @@ exports.editUser = async (id_user, email, name, lastname, password) => {
     return rows
   } catch (error) {
     throw new Error("No se pudo modificar el usuario");
-    
-    
   }
-
 }
 
 exports.editAddressUser = async (id_user,address) => {
@@ -64,6 +59,32 @@ exports.editAddressUser = async (id_user,address) => {
   } catch (error) {
     throw new Error("No se pudo modificar el usuario");
   }
+}
+
+exports.tokenIDAdd = async(token) =>{
+  let {email, jti} = jwt.decode(token)
+  
+  const { rows} = await pool.query('UPDATE users SET tokenid = $1 WHERE email = $2',[jti,email]);
+  
+  return rows
+}
+
+exports.tokenIDSearch = async(token) => {
+  let {email} = jwt.decode(token)
+  
+  const { rows:tokenid } = await pool.query('SELECT tokenid FROM users WHERE email = $1',[email]);
+  console.log("Search", tokenid);
+  
+  
+  return tokenid
+}
+exports.tokenIDRemove = async(token) =>{
+  const tokenDecode = jwt.decode(token)
+  let { email } = tokenDecode
+  
+  const { rows } = await pool.query('DELETE tokenid FROM users WHERE id_user = $1',[email]);
+  
+  return rows
 }
 
 // exports.deleteUser = async(id_user) => {

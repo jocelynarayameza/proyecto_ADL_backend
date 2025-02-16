@@ -1,4 +1,5 @@
 const jwt=require('jsonwebtoken');
+const { tokenIDSearch } = require('../modules/users');
 require('dotenv').config()
 
 module.exports = (req,res,next)=>{
@@ -10,8 +11,20 @@ module.exports = (req,res,next)=>{
     let revisarToken;
 
     try {
+      let tokenId= tokenIDSearch(token);
+      console.log(tokenId);
       revisarToken= jwt.verify(token,process.env.TOKEN_PWD)
       req.user=revisarToken;
+      
+      
+
+      
+      // if(tokenid==jti){
+      //   res.status(200).json({msg:'Autentificacion correcta','token':token})
+      // } else if (tokenJTI!=jti){
+      //   res.status(500).json({msg:"Usuario ya no esta logueado"})
+      // }
+
     } catch (error) {
       console.log(error);
       

@@ -2,7 +2,8 @@ const bcrypt = require('bcrypt')
 const jwt= require('jsonwebtoken');
 require('dotenv').config();
 
-const { getCart } = require('../modules/cart')
+const { getCart } = require('../modules/cart');
+const { getProductById } = require('../modules/products');
 
 exports.getCarts = async(req,res) =>{
   try {
@@ -15,22 +16,22 @@ exports.getCarts = async(req,res) =>{
   }
 }
 
-exports.buyProductsToOrders = async(req,res) =>{
-  try {
-    let { id_user } = await getUser(req);
-  } catch (error) {
+// exports.buyProductsToOrders = async(req,res) =>{
+//   try {
+//     let { id_user } = await getUser(req);
+//   } catch (error) {
     
-  }
-}
+//   }
+// }
 
-exports.addProductsToCart = async(req,res) =>{
-  try {
-    let { id_user } = await getUser(req);
-    const { id_product } = req.body
-    const addProductToCart(id_user,id_product)
-    res.status(200).send(cart);
+// exports.addProductsToCart = async(req,res) =>{
+//   try {
+//     let { id_user } = await getUser(req);
+//     const { id_product } = req.body
+//     const addProductToCart(id_user,id_product)
+//     res.status(200).send(cart);
     
-  } catch (error) {
+//   } catch (error) {
     
-  }
-}
+//   }
+// }

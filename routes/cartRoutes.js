@@ -6,6 +6,7 @@ const authentication = require('../middlewares/authentication')
 
 
 router.get("/", authentication, cartController.getCarts);
-router.post("/comprar", authentication, cartController.buyProducts);
+// router.post("/comprar", authentication, cartController.buyProductsToOrders);
+// router.post("/agregar", authentication, cartController.addProductsToCart)
 
 module.exports = router;

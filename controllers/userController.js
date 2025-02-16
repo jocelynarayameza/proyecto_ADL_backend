@@ -1,8 +1,9 @@
 const bcrypt = require('bcrypt')
 const jwt= require('jsonwebtoken');
 require('dotenv').config();
+const crypto = require("crypto");
 
-const { getUser, registerUser, loginUser, editUser, editAddressUser, deleteUser } = require('../modules/users');
+const { getUser, registerUser, loginUser, editUser, editAddressUser, deleteUser, tokenIDAdd, tokenIDRemove } = require('../modules/users');
 const { passEmailConfirm, emailValid, usernameValid, inputEmpty } = require('../middlewares/validation');
 
 
@@ -70,15 +71,17 @@ exports.loginUsers = async(req,res) =>{
             name: user.name,
             lastname: user.lastname,
             birthday: user.birthday,
-            address:user.address
+            address:user.address,
           },
-            process.env.TOKEN_PWD
+            process.env.TOKEN_PWD,
+            {jwtid: crypto.randomUUID().toString() }
         )
-        res.status(200).json({msg:'Autentificacion correcta','token':token})
+        await tokenIDAdd(token);
       }
     }
+    res.status(201).json({msg:'Usuario logueado satisfactoriamente'})
 
-  } catch (error) {
+  } catch (error) {   
     res.status(500).json({msg:"Fallo la autentificación"})
   }
 }
@@ -173,10 +176,13 @@ exports.editAddressUsers = async (req,res) =>{
 // }
 
 
-// exports.logout = async(req,res) =>{
-//   try {
-
-//   } catch (error) {
+exports.logout = async(req,res) =>{
+  // try {
+    const Authorization = req.header("Authorization")
+    const token = Authorization.split("Bearer ")[1]
+    await tokenIDRemove(token)
+    res.status(200).json({msg:"El usuario se deslogueó con éxito"})
+  // } catch (error) {
     
-//   }
-// }
+  // }
+}
