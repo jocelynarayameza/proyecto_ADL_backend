@@ -6,7 +6,8 @@ lastname varchar(20),
 email varchar,
 password varchar,
 birthday date,
-address varchar 
+address varchar,
+tokenid varchar
 );
 
 create table products(
@@ -18,14 +19,14 @@ product_quantity integer default 1,
 product_photo varchar,
 product_category varchar,
 seller integer,
-constraint fk_seller_user foreign key(seller) references users(id_user)
+constraint fk_seller_user foreign key(seller) references users(id_user) on delete cascade
 );
 
 create table cart(
-id_cart serial primary key,
 user_id integer,
 product_id integer,
 total_quantity integer,
+constraint pk_cart_products primary key(user_id, product_id),
 constraint fk_cart_user foreign key(user_id) references users(id_user),
 constraint fk_cart_product foreign key(product_id) references products(id_product)
 );
