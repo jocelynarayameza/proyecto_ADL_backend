@@ -1,4 +1,5 @@
-const { getProducts, getProductById, getMyProducts, getMyProductsById, putMyProductsById, deleteMyProductsById } = require('../modules/products.js');
+const { getProducts, getProductById, getMyProducts, newProduct, getMyProductsById, putMyProductsById, deleteMyProductsById } = require('../modules/products.js');
+const { getUser } = require('../modules/users.js');
 
 
 exports.getProductsController = async (req, res) => {
@@ -83,4 +84,18 @@ exports.deleteMyProductsByIdController = async (req, res) => {
     res.status(500).json({ error: error.message, errormsg: "error en controller" });
 
   }
+}
+
+exports.newProductController = async (req,res) => {
+  try {
+    const {id_user} = await getUser(req)
+    
+    let { product_name, product_description, product_price, product_quantity, product_photo, product_category } = req.body
+    await newProduct(product_name, product_description, product_price, product_quantity, product_photo, product_category, id_user)
+    res.status(201).json({msg:'Producto registrado satisfactoriamente'})
+
+  } catch (error) {
+     res.status(400).json({msg:"Fallo el agregar un nuevo producto"})
+  }
+  
 }

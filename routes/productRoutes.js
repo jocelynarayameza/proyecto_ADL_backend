@@ -9,6 +9,7 @@ router.get('/mis-productos', authentication, productController.getMyProductsCont
 router.get('/mis-productos/:idProduct', authentication, productController.getMyProductsByIdController)
 router.put('/mis-productos/:idProduct', authentication, productController.putMyProductsByIdController)
 router.delete('/mis-productos/:idProduct', authentication, productController.deleteMyProductsByIdController)
+router.post('/mis-productos/agregar', authentication, productController.newProductController)
 router.get('/:id', productController.getProductByIdController)
 
 
