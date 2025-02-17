@@ -15,6 +15,12 @@ exports.getUser = async (req,res) =>{
   }
 }
 
+exports.getUserName = async (id_user) =>{
+  const { rows} = await pool.query("SELECT name, lastname FROM users WHERE id_user=$1",[id_user]);
+  const fullName = rows[0].name + " " + rows[0].lastname
+  return fullName
+}
+
 
 
 exports.registerUser = async ( username, name, lastname, email, password, birthday) => {

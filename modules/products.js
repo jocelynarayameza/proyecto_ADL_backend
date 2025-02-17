@@ -19,7 +19,6 @@ exports.getProductById = async (id) =>{
         values: [id]};
         const { rows: product } = await pool.query(query);
 
-      console.log(product);
       return product[0];
       
     } catch (error) {

@@ -62,3 +62,13 @@ exports.inputEmpty = (value) =>{
     return true
   }
 }
+
+exports.myProductInCart = async (id_user, id_product) =>{
+  const {rows} = await pool.query('SELECT seller FROM products WHERE id_product = $1',[id_product]);
+
+  if(rows[0].seller == id_user){
+    return false
+  } else {
+    return true
+  }
+}

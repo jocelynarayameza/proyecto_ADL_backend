@@ -5,8 +5,8 @@ const cartController = require('../controllers/cartController')
 const authentication = require('../middlewares/authentication')
 
 
-router.get("/", authentication, cartController.getCarts);
+router.get("/", authentication, cartController.getCartController);
 // router.post("/comprar", authentication, cartController.buyProductsToOrders);
-// router.post("/agregar", authentication, cartController.addProductsToCart)
+router.post("/editar", authentication, cartController.editProductInCartController);
 
 module.exports = router;
