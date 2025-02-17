@@ -11,7 +11,18 @@ const { passEmailConfirm, emailValid, usernameValid, inputEmpty } = require('../
 exports.getUsers = async(req,res) => {
   try {
     const user = await getUser(req);
-    res.status(200).send(user);
+
+    
+    res.status(200).send( {
+      id_user: user.id_user, 
+      username: user.username,
+      name: user.name, 
+      lastname: user.lastname,
+      email: user.email,
+      birthday: user.birthday.toISOString().split('T')[0],
+      address: user.address
+    }
+  );
 
   } catch (error) {
     res.status(500).json({msg:'No se pudo obtener datos'});
@@ -30,7 +41,7 @@ exports.registerUsers = async(req,res) => {
     if(passEmailC && emailV && usernameV){
       password = await bcrypt.hash(password,12)
       await registerUser(username, name, lastname, email, password, birthday);
-      res.status(201).json({msg:'Usuario registrado satisfactoriamente'})
+      res.status(201).json({msg:'Usuario registrado satisfactoriamente','user_details': { 'username': username, 'email': email}})
 
     } else if (passEmailC && !emailV && usernameV){
       res.status(409).json({msg:'El email ya esta en uso'})

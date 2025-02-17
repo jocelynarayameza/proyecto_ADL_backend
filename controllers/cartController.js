@@ -83,16 +83,13 @@ exports.buyProductsToOrderController = async(req,res) =>{
       res.status(400).json({msg:"Carrito esta vacio"});
     } else{
       let orderConfirm = await buyProductToOrder(id_user,cart);
-      console.log(orderConfirm);
+      console.log(orderConfirm.confirm);
       
-      if(orderConfirm){
-        console.log("order true");
-        
+      if(orderConfirm.confirm){
         let deleteConfirm = await deleteTotalCart(id_user);
-        console.log(deleteConfirm);
-        
+
         if(deleteConfirm){
-          res.status(200).json({msg:"Carrito fue comprado con éxito",'cart':cart});
+          res.status(200).json({msg:"Carrito fue comprado con éxito",'order_details':orderConfirm.order_details, 'cart':cart});
         } else {
           res.status(400).json({msg:"No se pudo borrar el carrito"});
         }
@@ -102,7 +99,6 @@ exports.buyProductsToOrderController = async(req,res) =>{
     }
   } catch (error) {
     res.status(400).json({msg:"No se pudo comprar el carrito"});
-  }
-  
+  } 
 }
 

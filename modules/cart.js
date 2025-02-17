@@ -19,15 +19,11 @@ exports.getCartFull = async (id_user) =>{
         product_photo: productInfo.product_photo};  
       }
       ))
-
     return cartNew
 
   } catch (error) {
     throw new Error("Error al obtener el carrito");
-    
   }
-    
-
 }
 
 exports.checkProductInCart = async(id_user, id_product,) =>{
@@ -72,8 +68,7 @@ exports.editProductInCart = async (id_user,id_product,total_quantity) =>{
       return true
 
     } else if (total_quantity>product_quantity){
-      return false
-      
+      return false 
     }
     
   } catch (error) {
@@ -96,6 +91,7 @@ exports.deleteProductInCart = async(id_user, id_product ) =>{
 }
 
 
+
 exports.buyProductToOrder = async (id_user, cart) =>{
   try {
     console.log(id_user);
@@ -109,10 +105,10 @@ exports.buyProductToOrder = async (id_user, cart) =>{
     let order_date = new Date()
     const orderDate = order_date.toISOString().split('T')[0]
     const orderTime = order_date.toISOString().split('T')[1].split('Z')[0]
-    order_date = orderDate + " " + orderTime;
+    order_date_final = orderDate + " " + orderTime;
   
-    const { rows:orderInsert } = await pool.query('INSERT INTO orders (order_user, order_total, order_date) VALUES ($1,$2,$3)',[id_user, totalPriceOrder, order_date]);
-    const { rows: orderSearch } = await pool.query('SELECT id_order FROM orders WHERE order_user = $1 AND order_total = $2 AND order_date = $3', [id_user, totalPriceOrder, order_date ]);
+    await pool.query('INSERT INTO orders (order_user, order_total, order_date) VALUES ($1,$2,$3)',[id_user, totalPriceOrder, order_date_final]);
+    const { rows: orderSearch } = await pool.query('SELECT id_order FROM orders WHERE order_user = $1 AND order_total = $2 AND order_date = $3', [id_user, totalPriceOrder, order_date_final ]);
   
     const orderId = orderSearch[0].id_order;
     
@@ -121,15 +117,14 @@ exports.buyProductToOrder = async (id_user, cart) =>{
       await pool.query('INSERT INTO order_details (order_id, order_product, product_order_price,product_order_quantity) VALUES ($1,$2,$3,$4)', [orderId, product.product_id, product.product_price, product.total_quantity])
   
     })) 
-    return true
+    return {confirm: true, order_details: { id_order: orderId, order_date: order_date_final, order_total: totalPriceOrder }}
 
   } catch (error) {
     throw new Error("Error al enviar la orden");
-    
-    
   }
-
 }
+
+
 
 exports.deleteTotalCart = async (id_user) =>{
   try {
