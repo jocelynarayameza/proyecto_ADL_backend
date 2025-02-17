@@ -14,7 +14,7 @@ exports.getOrderByIdController = async (req, res) => {
     try {
         const idOrder = req.params.idPedido;
         const idUser = req.user.id
-        const order = await getOrderById(idOrder, idUser);
+        const order = await getOrderById(idUser, idOrder);
         res.json(order);
     } catch (error) {
         res.status(500).json({ error: error.message, errormsg: "error en controller" });

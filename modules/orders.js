@@ -12,12 +12,12 @@ exports.getOrders = async (idUser) => {
   }
 }
 
-exports.getOrderById = async (idUser, idProduct) => {
+exports.getOrderById = async (idUser, idOrder) => {
     try {
   
       const query = {
         text: "SELECT * FROM orders WHERE order_user = $1 and id_order = $2",
-        values: [idUser, idProduct]
+        values: [idUser, idOrder]
       };
   
       const { rows: order } = await pool.query(query);
