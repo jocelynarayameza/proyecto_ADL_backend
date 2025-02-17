@@ -12,7 +12,6 @@ exports.getUsers = async(req,res) => {
   try {
     const user = await getUser(req);
 
-    
     res.status(200).send( {
       id_user: user.id_user, 
       username: user.username,
@@ -183,18 +182,16 @@ exports.logout = async(req,res) =>{
 
 
 
-// exports.deleteUsers = async(req,res) => {
-//   try {
-//     const { id_user } = await getUser(req)
-//     console.log(id_user);
-    
+exports.deleteUsers = async(req,res) => {
+  try {
+    const { id_user } = await getUser(req)
+    let deleteUserConfirm = await deleteUser(id_user);
+  
+    if(deleteUserConfirm){
+      res.status(200).json({msg:"El usuario se eliminó con éxito"})
+    }
 
-//     await deleteUser(id_user);
-//     res.status(200).json({msg:"El usuario se eliminó con éxito"})
-
-//   } catch (error) {
-//     console.log(error);
-    
-//   }
-
-// }
+  } catch (error) {
+    res.status(400).json({msg:'No se pudo eliminar el usuario'})
+  }
+}

@@ -94,7 +94,6 @@ exports.deleteProductInCart = async(id_user, id_product ) =>{
 
 exports.buyProductToOrder = async (id_user, cart) =>{
   try {
-    console.log(id_user);
     let totalPrice = 0;
     let totalPriceOrder = cart.map((productPrice) =>{
       totalPrice += (productPrice.product_price * productPrice.total_quantity);
@@ -113,7 +112,7 @@ exports.buyProductToOrder = async (id_user, cart) =>{
     const orderId = orderSearch[0].id_order;
     
   
-     await Promise.all (cart.map( async(product) => {
+    await Promise.all (cart.map( async(product) => {
       await pool.query('INSERT INTO order_details (order_id, order_product, product_order_price,product_order_quantity) VALUES ($1,$2,$3,$4)', [orderId, product.product_id, product.product_price, product.total_quantity])
   
     })) 

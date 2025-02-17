@@ -74,6 +74,7 @@ exports.editProductInCartController = async(req,res) =>{
 }
 
 
+
 exports.buyProductsToOrderController = async(req,res) =>{
   try {
     let { id_user } = await getUser(req);
@@ -83,7 +84,6 @@ exports.buyProductsToOrderController = async(req,res) =>{
       res.status(400).json({msg:"Carrito esta vacio"});
     } else{
       let orderConfirm = await buyProductToOrder(id_user,cart);
-      console.log(orderConfirm.confirm);
       
       if(orderConfirm.confirm){
         let deleteConfirm = await deleteTotalCart(id_user);
