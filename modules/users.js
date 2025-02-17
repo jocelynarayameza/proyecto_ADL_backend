@@ -130,8 +130,5 @@ exports.deleteUser = async(id_user) => {
 
   } catch (error) {
     throw new Error("Error al eliminar el usuario");
-    
   }
-
-  
 }
