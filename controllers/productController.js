@@ -38,8 +38,8 @@ exports.getMyProductsByIdController = async (req, res) => {
   try {
     const user = req.user;
     const userId = user.id;
-    const productId = req.params.idProduct
-    const productUser = await getMyProductsById(userId, productId)
+    const productoId = req.params.idProducto
+    const productUser = await getMyProductsById(userId, productoId)
     res.json(productUser);
   } catch (error) {
     res.status(500).json({ error: error.message, errormsg: "error en controller" });
@@ -51,8 +51,8 @@ exports.putMyProductsByIdController = async (req, res) => {
   try {
     const user = req.user;
     const userId = user.id;
-    const productId = req.params.idProduct
-    const productData = await getMyProductsById(userId, productId)
+    const productoId = req.params.idProducto
+    const productData = await getMyProductsById(userId, productoId)
     const {product_name: prevName, product_description: prevDescription, product_price: prevPrice, product_quantity: prevQuantity, product_photo: prevPhoto, product_category: prevCategory} = productData
     const { product_name, product_description, product_price, product_quantity,product_photo, product_category } = req.body;
     const updatedProduct = {
@@ -64,7 +64,7 @@ exports.putMyProductsByIdController = async (req, res) => {
       product_category: product_category || prevCategory
     }
 
-    const productUser = await putMyProductsById(userId, productId, updatedProduct)
+    const productUser = await putMyProductsById(userId, productoId, updatedProduct)
 
     res.json(productUser);
   } catch (error) {
@@ -77,8 +77,8 @@ exports.deleteMyProductsByIdController = async (req, res) => {
   try {
     const user = req.user;
     const userId = user.id;
-    const productId = req.params.idProduct
-    const deletedProduct = await deleteMyProductsById(userId, productId)
+    const productoId = req.params.idProducto
+    const deletedProduct = await deleteMyProductsById(userId, productoId)
     res.json(deletedProduct);
   } catch (error) {
     res.status(500).json({ error: error.message, errormsg: "error en controller" });

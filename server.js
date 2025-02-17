@@ -18,8 +18,8 @@ require('dotenv').config()
 app.use('/',routes);
 app.use('/api/usuarios',userRoutes);
 app.use('/api/carrito',cartRoutes);
-// app.use('/api/orders',orderRoutes);
-app.use('/api/products',productRoutes);
+app.use('/api/pedidos',orderRoutes);
+app.use('/api/productos',productRoutes);
 
 
 

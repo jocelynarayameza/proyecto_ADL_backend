@@ -6,10 +6,10 @@ const authentication = require('../middlewares/authentication')
 
 router.get('/', productController.getProductsController)
 router.get('/mis-productos', authentication, productController.getMyProductsController)
-router.get('/mis-productos/:idProduct', authentication, productController.getMyProductsByIdController)
-router.put('/mis-productos/:idProduct', authentication, productController.putMyProductsByIdController)
-router.delete('/mis-productos/:idProduct', authentication, productController.deleteMyProductsByIdController)
 router.post('/mis-productos/agregar', authentication, productController.newProductController)
+router.get('/mis-productos/:idProducto', authentication, productController.getMyProductsByIdController)
+router.put('/mis-productos/:idProducto', authentication, productController.putMyProductsByIdController)
+router.delete('/mis-productos/:idProducto', authentication, productController.deleteMyProductsByIdController)
 router.get('/:id', productController.getProductByIdController)
 
 
