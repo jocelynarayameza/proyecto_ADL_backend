@@ -136,3 +136,13 @@ exports.deleteTotalCart = async (id_user) =>{
   }
 }
 
+exports.repeatOrderToCart = async (idUser, idOrder) => {
+  try {
+    const { rows: orderProducts } = await pool.query(
+      'SELECT order_product, product_order_quantity FROM order_details WHERE order_id = $1',
+      [idOrder]
+    );
+
+  } catch ( error) {
+  }
+};

@@ -1,4 +1,4 @@
-const {getOrders} = require('../modules/orders.js')
+const {getOrders, getOrderById} = require('../modules/orders.js')
 exports.getOrdersController = async (req, res) => {
     try {
     const user = req.user;
