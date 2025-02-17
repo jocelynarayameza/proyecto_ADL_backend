@@ -188,8 +188,6 @@ exports.deleteUsers = async(req,res) => {
   
     if(deleteUserConfirm){
       res.status(200).json({msg:"El usuario se eliminó con éxito"})
-    } else {
-      res.status(400).json({msg:'No se pudo eliminar el usuario'})
     }
 
   } catch (error) {
