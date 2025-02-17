@@ -99,7 +99,7 @@ exports.deleteProductInCart = async(id_user, id_product ) =>{
 }
 
 
-exports.buyProductToOrder = async (id_user, id_product) =>{
+exports.buyProductToOrder = async (id_user, cart) =>{
 
 }
 

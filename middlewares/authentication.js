@@ -10,13 +10,14 @@ module.exports = async (req,res,next)=>{
     const token = authHeader.split(" ")[1];
     let revisarToken;
     let tokenVerify = false;
-    
+
     try {
       let tokenid= await tokenIDSearch(token);
+
       revisarToken= jwt.verify(token,process.env.TOKEN_PWD)
       req.user=revisarToken;
       let {jti} = jwt.decode(token)
-      
+
       if(tokenid==jti){
          tokenVerify = true;
       } else if (tokenid!=jti){

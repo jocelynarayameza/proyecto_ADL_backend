@@ -1,10 +1,11 @@
 const jwt= require('jsonwebtoken');
 require('dotenv').config();
 
-const { getCart, deleteProductInCart, editProductInCart, checkProductInCart, addProductInCart, getCartFull } = require('../modules/cart');
-const { getUser, getUserName } = require('../modules/users');
-const { getProductById } = require('../modules/products');
+const { deleteProductInCart, editProductInCart, checkProductInCart, addProductInCart, getCartFull, buyProductToOrder } = require('../modules/cart');
+const { getUser} = require('../modules/users');
 const { myProductInCart } = require('../middlewares/validation');
+
+
 
 exports.getCartController = async(req,res) =>{
 try {
@@ -68,7 +69,10 @@ exports.editProductInCartController = async(req,res) =>{
 }
 
 
-exports.buyProductsToOrders = async(req,res) =>{
+exports.buyProductsToOrderController = async(req,res) =>{
+  let { id_user } = await getUser(req);
+  let cart = getCartFull(id_user)
 
+  await buyProductToOrder(id_user,cart)
 }
 
