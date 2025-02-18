@@ -31,7 +31,7 @@ exports.usernameValid = async (username) =>{
   }
 }
 
-exports.passEmailConfirm = (email,email_confirm, password, password_confirm) =>{
+exports.passEmailConfirm = async (email,email_confirm, password, password_confirm) =>{
   try {
     let emailConfirm = false;
     let passConfirm = false;
@@ -57,7 +57,7 @@ exports.passEmailConfirm = (email,email_confirm, password, password_confirm) =>{
 
 }
 
-exports.inputEmpty = (value) =>{
+exports.inputEmpty = async (value) =>{
   if(value.length!=0){
     return true
   }

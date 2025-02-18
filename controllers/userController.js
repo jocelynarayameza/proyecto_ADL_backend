@@ -24,7 +24,7 @@ exports.getUsers = async(req,res) => {
   );
 
   } catch (error) {
-    res.status(500).json({msg:'No se pudo obtener datos'});
+    res.status(401).json({msg:'No se pudo obtener datos'});
   }
 };
 
@@ -33,7 +33,7 @@ exports.getUsers = async(req,res) => {
 exports.registerUsers = async(req,res) => {
   try {
     let {username, name, lastname, email, password, birthday, password_confirm, email_confirm} = req.body;
-    const passEmailC = passEmailConfirm(email,email_confirm, password, password_confirm); 
+    const passEmailC = await passEmailConfirm(email,email_confirm, password, password_confirm); 
     const usernameV = await usernameValid(username);
     const emailV = await emailValid(email);
 
@@ -56,7 +56,7 @@ exports.registerUsers = async(req,res) => {
     }
 
   } catch (error) {
-    res.status(409).json({msg:'No se pudo registrar nuevo usuario'})
+    res.status(401).json({msg:'No se pudo registrar nuevo usuario'})
   }
 }
 
@@ -92,8 +92,8 @@ exports.loginUsers = async(req,res) =>{
       }
     }
     
-  } catch (error) {  
-    res.status(500).json({msg:"No se pudo autenticar"})
+  } catch (err) {  
+    res.status(401).json({msg:"No se pudo autenticar"})
   }
 }
 
@@ -106,34 +106,34 @@ exports.editUsers = async (req,res) =>{
 
     const passwordC = await bcrypt.compare(passwordChange, password);
     
-    if( inputEmpty(emailChange) && email != emailChange ){
+    if( await inputEmpty(emailChange) && email != emailChange ){
       email = emailChange;
 
-    } else if(inputEmpty(emailChange) && email== emailChange){
+    } else if( await inputEmpty(emailChange) && email== emailChange){
       res.status(409).json({msg:"Email es el mismo que tenía antes"})
     }
 
 
-    if( inputEmpty(nameChange) && name != nameChange ){
+    if( await inputEmpty(nameChange) && name != nameChange ){
       name = nameChange;
       
-    } else if(inputEmpty(nameChange) && name== nameChange){
+    } else if(await inputEmpty(nameChange) && name== nameChange){
       res.status(409).json({msg:"Nombre es el mismo que tenía antes"})
     }
 
 
-    if( inputEmpty(lastnameChange) && lastname!= lastnameChange ){
+    if(await  inputEmpty(lastnameChange) && lastname!= lastnameChange ){
       lastname = lastnameChange;
       
-    } else if(inputEmpty(lastnameChange) && lastname== lastnameChange){
+    } else if(await inputEmpty(lastnameChange) && lastname== lastnameChange){
       res.status(409).json({msg:"Apellido es el mismo que tenía antes"})
     }
 
 
-    if( inputEmpty(passwordChange) && !passwordC){
+    if(await  inputEmpty(passwordChange) && !passwordC){
       password = await bcrypt.hash(passwordChange,12)
       
-    } else if(inputEmpty(passwordChange) && passwordC){
+    } else if(await inputEmpty(passwordChange) && passwordC){
       res.status(409).json({msg:"Contraseña es la misma que tenía antes"})
     }
 
@@ -163,7 +163,7 @@ exports.editAddressUsers = async (req,res) =>{
     res.status(200).json({msg:"La dirección se modificó con éxito"})
 
   } catch (error) {
-    res.status(400).json({msg:'No se pudo modificar la dirección del usuario'})
+    res.status(401).json({msg:'No se pudo modificar la dirección del usuario'})
   }
 }
 
@@ -192,6 +192,6 @@ exports.deleteUsers = async(req,res) => {
     }
 
   } catch (error) {
-    res.status(400).json({msg:'No se pudo eliminar el usuario'})
+    res.status(401).json({msg:'No se pudo eliminar el usuario'})
   }
 }
