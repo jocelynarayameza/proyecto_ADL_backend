@@ -3,11 +3,11 @@ const router = express.Router();
 
 
   router.get('/', (req,res) =>{
-    res.send('Bienvenido')
+    res.send({msg: "Bienvenido a FF Marketplace" })
   })
 
-  // router.get('*', (req,res) =>{
-  //   res.status(404).send({ msg: "La ruta que intenta consultar no existe" })
-  // })
+  router.get('*', (req,res) =>{
+    res.status(404).send({ msg: "La ruta que intenta consultar no existe" })
+  })
 
   module.exports = router;
