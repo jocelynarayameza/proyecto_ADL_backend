@@ -10,12 +10,12 @@ describe("Operaciones CRUD de usuario", () => {
 
   test("Registrar un nuevo usuario con éxito con status 201", async () => {
     const newUser = {
-        "email":"garnet1@tienda.cl",
+        "email":"garnet@tienda.cl",
         "password":"12341234",
-        "username": "Garnet_tienda1",
+        "username": "Garnet_tienda",
         "name": "Garnet",
         "lastname":"von Alexandros",
-        "email_confirm":"garnet1@tienda.cl",
+        "email_confirm":"garnet@tienda.cl",
         "password_confirm":"12341234",
         "birthday": "2020-03-06"
     };
@@ -56,8 +56,8 @@ describe("Operaciones CRUD de usuario", () => {
       .set('Content-Type', 'application/json')
       .set('Accept', 'application/json');
 
-    expect(response.status).toBe(401)
-    expect(response.body.msg).toBe('No existe el usuario'); 
+    expect(response.status).toBe(404)
+    expect(response.body.msg).toBe('Usuario no encontrado'); 
   });
 
 
@@ -75,7 +75,7 @@ describe("Operaciones CRUD de usuario", () => {
       .set('Accept', 'application/json');
 
     expect(response.status).toBe(401)
-    expect(response.body.msg).toBe('Contrasena incorrecta'); 
+    expect(response.body.msg).toBe('Contraseña incorrecta'); 
   });
 
 });

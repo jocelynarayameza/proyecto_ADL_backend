@@ -12,6 +12,13 @@ try {
   let { id_user } = await getUser(req)
   let cart = await getCartFull(id_user)
 
+  if (!cart) {
+   return res.status(404).json({ msg: "No se encontró el carrito del usuario." });
+  }
+
+  if(cart.length==0){
+    return res.status(400).json({msg:"Carrito esta vacio"});
+  }
   res.status(200).send(cart);
 
 } catch (error) {
@@ -28,7 +35,7 @@ exports.editProductInCartController = async(req,res) =>{
     const productValid = await myProductInCart(id_user, id_product);
 
     if (!productValid){
-      res.status(409).json({msg:"No puedes agregar al carrito un producto tuyo"});
+      return res.status(409).json({msg:"No puedes agregar al carrito un producto tuyo"});
 
     } else if(productValid) {
       if(total_quantity===0){
@@ -79,7 +86,7 @@ exports.buyProductsToOrderController = async(req,res) =>{
   try {
     let { id_user } = await getUser(req);
     let cart = await getCartFull(id_user)
-
+    
     if(cart.length==0){
       res.status(400).json({msg:"Carrito esta vacio"});
     } else{
@@ -100,5 +107,11 @@ exports.buyProductsToOrderController = async(req,res) =>{
   } catch (error) {
     res.status(400).json({msg:"No se pudo comprar el carrito"});
   } 
+}
+
+exports.deleteCartController = async (req,res) =>{
+  let { id_user } = await getUser(req);
+  await deleteTotalCart(id_user);
+  res.status(200).json({msg:"Carrito fue vaciado con éxito"})
 }
 

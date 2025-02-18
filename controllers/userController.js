@@ -10,7 +10,12 @@ const { passEmailConfirm, emailValid, usernameValid, inputEmpty } = require('../
 
 exports.getUsers = async(req,res) => {
   try {
-    const user = await getUser(req);
+    const user = await getUser(req)
+    
+
+    if(!user){
+     return res.status(404).json({msg: "Usuario no encontrado"})
+    }
 
     res.status(200).send( {
       id_user: user.id_user, 
@@ -24,7 +29,7 @@ exports.getUsers = async(req,res) => {
   );
 
   } catch (error) {
-    res.status(401).json({msg:'No se pudo obtener datos'});
+    res.status(500).json({msg: error.message});
   }
 };
 
@@ -49,14 +54,14 @@ exports.registerUsers = async(req,res) => {
       res.status(409).json({msg:'El usuario ya esta en uso'})
 
     } else if (!passEmailC){
-      res.status(409).json({msg:'La contrasena o el email de confirmacion no son iguales'})
+      res.status(400).json({msg:'La contraseña o el email de confirmación no son iguales'})
 
     } else if (passEmailC && !emailV && !usernameV) {
       res.status(409).json({msg:'El usuario y el email ya estan en uso'})
     }
 
   } catch (error) {
-    res.status(401).json({msg:'No se pudo registrar nuevo usuario'})
+    res.status(500).json({msg:'No se pudo registrar nuevo usuario'})
   }
 }
 
@@ -68,32 +73,31 @@ exports.loginUsers = async(req,res) =>{
     const user = await loginUser(email);
 
     if(!user){
-      res.status(401).json({msg:'No existe el usuario'})
+      return res.status(404).json({msg:'Usuario no encontrado'})
+    } 
 
+    if(!bcrypt.compareSync(password,user.password)){
+      res.status(401).json({msg:"Contraseña incorrecta"})
     } else {
-      if(!bcrypt.compareSync(password,user.password)){
-        res.status(401).json({msg:"Contrasena incorrecta"})
-      } else {
-        const token = jwt.sign(
-          {id: user.id_user,
-            email: user.email,
-            password: user.password,
-            username:user.username,
-            name: user.name,
-            lastname: user.lastname,
-            birthday: user.birthday,
-            address:user.address,
-          },
-            process.env.TOKEN_PWD,
-            {jwtid: crypto.randomUUID().toString() }
-        )
-        await tokenIDAdd(token);
-        res.status(200).json({msg:'Autentificacion correcta','token':token})
-      }
+      const token = jwt.sign(
+        {id: user.id_user,
+          email: user.email,
+          password: user.password,
+          username:user.username,
+          name: user.name,
+          lastname: user.lastname,
+          birthday: user.birthday,
+          address:user.address,
+        },
+          process.env.TOKEN_PWD,
+          {jwtid: crypto.randomUUID().toString() }
+      )
+      await tokenIDAdd(token);
+      res.status(200).json({msg:'Autentificacion correcta','token':token})
     }
     
-  } catch (err) {  
-    res.status(401).json({msg:"No se pudo autenticar"})
+  } catch (error) {  
+    res.status(500).json({msg:"No se pudo autenticar"})
   }
 }
 
@@ -105,12 +109,16 @@ exports.editUsers = async (req,res) =>{
     let { nameChange, lastnameChange, passwordChange, emailChange} = req.body;
 
     const passwordC = await bcrypt.compare(passwordChange, password);
+    const emailChangeValid = await emailValid(emailChange);
     
-    if( await inputEmpty(emailChange) && email != emailChange ){
+    if( await inputEmpty(emailChange) && email != emailChange && emailChangeValid ){
       email = emailChange;
 
     } else if( await inputEmpty(emailChange) && email== emailChange){
-      res.status(409).json({msg:"Email es el mismo que tenía antes"})
+      return res.status(409).json({msg:"Email es el mismo que tenía antes"})
+
+    } else if(!emailChangeValid){
+      return res.status(409).json({msg:"Email ya existe en uso"})
     }
 
 
@@ -118,7 +126,7 @@ exports.editUsers = async (req,res) =>{
       name = nameChange;
       
     } else if(await inputEmpty(nameChange) && name== nameChange){
-      res.status(409).json({msg:"Nombre es el mismo que tenía antes"})
+      return res.status(409).json({msg:"Nombre es el mismo que tenía antes"})
     }
 
 
@@ -126,7 +134,7 @@ exports.editUsers = async (req,res) =>{
       lastname = lastnameChange;
       
     } else if(await inputEmpty(lastnameChange) && lastname== lastnameChange){
-      res.status(409).json({msg:"Apellido es el mismo que tenía antes"})
+      return res.status(409).json({msg:"Apellido es el mismo que tenía antes"})
     }
 
 
@@ -134,14 +142,14 @@ exports.editUsers = async (req,res) =>{
       password = await bcrypt.hash(passwordChange,12)
       
     } else if(await inputEmpty(passwordChange) && passwordC){
-      res.status(409).json({msg:"Contraseña es la misma que tenía antes"})
+      return res.status(409).json({msg:"Contraseña es la misma que tenía antes"})
     }
 
     await editUser(id_user, email, name, lastname, password)
     res.status(200).json({msg:"El usuario se modificó con éxito"})
 
   } catch (error) {
-    res.status(401).json({msg:'No se pudo modificar el usuario'})
+    res.status(500).json({msg:'No se pudo modificar el usuario'})
   }
 }
 
@@ -156,14 +164,14 @@ exports.editAddressUsers = async (req,res) =>{
       address= addressChange;
 
     } else if(address == addressChange){
-      res.status(409).json({msg:"Dirección es la misma que tenía antes"})
+     return res.status(409).json({msg:"Dirección es la misma que tenía antes"})
     }
 
     await editAddressUser(id_user,address)
     res.status(200).json({msg:"La dirección se modificó con éxito"})
 
   } catch (error) {
-    res.status(401).json({msg:'No se pudo modificar la dirección del usuario'})
+    res.status(500).json({msg:'No se pudo modificar la dirección del usuario'})
   }
 }
 
@@ -177,7 +185,7 @@ exports.logout = async(req,res) =>{
     res.status(200).json({msg:"El usuario se deslogueó con éxito"})
 
   } catch (error) {
-    res.status(401).json({msg:'No se pudo desloguear al usuario'})
+    res.status(500).json({msg:'No se pudo desloguear al usuario'})
 }}
 
 
@@ -188,10 +196,12 @@ exports.deleteUsers = async(req,res) => {
     let deleteUserConfirm = await deleteUser(id_user);
   
     if(deleteUserConfirm){
-      res.status(200).json({msg:"El usuario se eliminó con éxito"})
+     return res.status(200).json({msg:"El usuario se eliminó con éxito"})
     }
 
+  res.status(404).json({ msg: 'No se encontró el usuario para eliminar' });
+
   } catch (error) {
-    res.status(401).json({msg:'No se pudo eliminar el usuario'})
+    res.status(500).json({msg:'No se pudo eliminar el usuario'})
   }
 }

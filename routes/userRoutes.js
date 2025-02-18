@@ -11,7 +11,7 @@ router.get("/perfil", authentication, userController.getUsers);
 router.put("/editar-perfil", authentication, userController.editUsers);
 router.put("/editar-direccion",authentication, userController.editAddressUsers);
 router.delete("/eliminar", authentication, userController.deleteUsers);
-router.get("/desconectar",userController.logout);
+router.get("/cerrar-sesion",userController.logout);
 
 
 module.exports = router;
