@@ -17,7 +17,7 @@ try {
   }
 
   if(cart.length==0){
-    return res.status(400).json({msg:"Carrito esta vacio"});
+    return res.status(401).json({msg:"Carrito esta vacio"});
   }
   res.status(200).send(cart);
 

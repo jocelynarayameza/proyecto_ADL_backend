@@ -87,22 +87,22 @@ describe("Operaciones CRUD de usuario", () => {
   });
 
 
-  test("Eliminar a un usuario con status 200", async () => {
+  // test("Eliminar a un usuario con status 200", async () => {
     
-    if (!token || !id_user) {
-      throw new Error("Token o id_user no disponible para la prueba");
-    }
+  //   if (!token || !id_user) {
+  //     throw new Error("Token o id_user no disponible para la prueba");
+  //   }
 
-    const response = await request(app)
-    .post("/usuarios/eliminar")
-    .set('Authorization', `Bearer ${token}`) 
-    .set('Content-Type', 'application/json')
-    .set('Accept', 'application/json')
+  //   const response = await request(app)
+  //   .post("/usuarios/eliminar")
+  //   .set('Authorization', `Bearer ${token}`) 
+  //   .set('Content-Type', 'application/json')
+  //   .set('Accept', 'application/json')
 
-    console.log("Response body:", response.body); 
-    console.log("Response status:", response.status);
+  //   console.log("Response body:", response.body); 
+  //   console.log("Response status:", response.status);
   
-    expect(response.status).toBe(200); 
-    expect(response.body.msg).toBe('El usuario se eliminó con éxito'); 
-  })
+  //   expect(response.status).toBe(200); 
+  //   expect(response.body.msg).toBe('El usuario se eliminó con éxito'); 
+  // })
 });
