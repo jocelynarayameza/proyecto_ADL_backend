@@ -14,6 +14,7 @@ exports.getProductsController = async (req, res) => {
 exports.getProductByIdController = async (req, res) => {
   try {
     const id = req.params.id;
+    
     const product = await getProductById(id);
     if (!product) {
       return res.status(404).json({ error: "Producto no encontrado" });
@@ -42,6 +43,7 @@ exports.getMyProductsByIdController = async (req, res) => {
     const user = req.user;
     const userId = user.id_user;
     const productoId = req.params.idProducto
+
     const productUser = await getMyProductsById(userId, productoId)
     console.log(productUser)
     res.json(productUser);
@@ -56,7 +58,9 @@ exports.putMyProductsByIdController = async (req, res) => {
     const user = req.user;
     const userId = user.id_user;
     const productoId = req.params.idProducto
+    
     const productData = await getMyProductsById(userId, productoId)
+    
     const { product_name: prevName, product_description: prevDescription, product_price: prevPrice, product_quantity: prevQuantity, product_photo: prevPhoto, product_category: prevCategory } = productData
     const { product_name, product_description, product_price, product_quantity, product_photo, product_category } = req.body;
     if (product_price && isNaN(product_price)) {
@@ -87,7 +91,7 @@ exports.putMyProductsByIdController = async (req, res) => {
 exports.deleteMyProductsByIdController = async (req, res) => {
   try {
     const user = req.user;
-    const userId = user.id;
+    const userId = user.id_user;
     const productoId = req.params.idProducto
     const deletedProduct = await deleteMyProductsById(userId, productoId)
     res.json(deletedProduct);

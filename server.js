@@ -12,6 +12,7 @@ const errorHandler = require('./middlewares/corsMiddleware')
 
 app.use(cors())
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: true }));
 require('dotenv').config()
 

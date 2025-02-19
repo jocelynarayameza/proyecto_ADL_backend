@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken');
 exports.getProducts = async () => {
   try {
     const { rows: products } = await pool.query("SELECT * FROM products");
-    console.log(products);
     return products
 
   } catch (error) {
@@ -20,6 +19,7 @@ exports.getProductById = async (id) => {
     };
     const { rows: product } = await pool.query(query);
 
+    
       return product[0];
       
     } catch (error) {

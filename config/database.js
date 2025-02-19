@@ -9,8 +9,7 @@ const pool = new Pool({
   allowExitOnIdle: true,
 });
 
-pool
-  .connect()
+pool.connect()
   .then(() => console.log("Conectado a la base de datos correctamente", process.env.DB_DATABASE))
   .catch((error) => {
     console.error("Error al conectar con la base de datos:", error.message);

@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "test": "jest",
+    "start": "node server.js"
+  },
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
@@ -6,7 +10,26 @@
     "express": "^4.21.2",
     "jest": "^29.7.0",
     "jsonwebtoken": "^9.0.2",
-    "pg": "^8.13.1",
-    "pg-format": "^1.0.4"
-  }
+    "pg": "^8.13.3",
+    "pg-format": "^1.0.4",
+    "supertest": "^7.0.0"
+  },
+  "name": "proyecto_adl_backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jocelynarayameza/proyecto_ADL_backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jocelynarayameza/proyecto_ADL_backend/issues"
+  },
+  "homepage": "https://github.com/jocelynarayameza/proyecto_ADL_backend#readme",
+  "description": ""
 }

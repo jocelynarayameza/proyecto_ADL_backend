@@ -3,6 +3,7 @@ const jwt=require('jsonwebtoken');
 
 exports.getUser = async (req,res) =>{
   try {
+    
     const Authorization = req.header("Authorization")
     const token = Authorization.split("Bearer ")[1]
     const {email} = jwt.decode(token)
@@ -11,7 +12,7 @@ exports.getUser = async (req,res) =>{
     return users[0]
 
   } catch (error) {
-    throw new Error('Error al obtener el usuario');
+    throw new Error('Error al obtener el usuario'+ error.message);
   }
 }
 
@@ -108,7 +109,7 @@ exports.tokenIDRemove = async(token) =>{
     return rows
 
   } catch (error) {
-    throw new Error("Error al eliminar el token ID del usuario");
+    throw new Error("Error al eliminar el token ID del usuario" + error.message);
   }
 }
 
