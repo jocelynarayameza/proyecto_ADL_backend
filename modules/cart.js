@@ -137,11 +137,33 @@ exports.deleteTotalCart = async (id_user) =>{
 
 exports.repeatOrderToCart = async (idUser, idOrder) => {
   try {
-    const { rows: orderProducts } = await pool.query(
-      'SELECT order_product, product_order_quantity FROM order_details WHERE order_id = $1',
-      [idOrder]
+    const { rows: validateUser } = await pool.query(
+      `SELECT id_order FROM orders WHERE id_order = $1 AND order_user = $2`,
+      [idOrder, idUser]
     );
 
-  } catch ( error) {
+    if (validateUser.length === 0) {
+      throw new Error("La orden no pertenece al usuario o no existe");
+    }
+
+    const { rows: orderProducts } = await pool.query(
+      `SELECT order_product, product_order_quantity FROM order_details WHERE order_id = $1`,
+      [idOrder]
+    );
+    await Promise.all(orderProducts.map(async (product) => {
+      const { order_product, product_order_quantity } = product;
+      const productExists = await exports.checkProductInCart(idUser, order_product);
+
+      if (productExists) {
+        await exports.editProductInCart(idUser, order_product, product_order_quantity);
+      } else {
+        await exports.addProductInCart(idUser, order_product, product_order_quantity);
+      }
+    }));
+    return { msg: "Orden añadida al carrito" };
+
+  } catch (error) {
+    console.error("Error en repeatOrderToCart:", error);
+    throw new Error(`Error al repetir la orden: ${error.message}`);
   }
 };

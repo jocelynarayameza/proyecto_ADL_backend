@@ -37,7 +37,9 @@ exports.getMyProducts = async (id) => {
     };
 
     const { rows: products } = await pool.query(query);
-console.log(products)
+    if (products.length === 0) {
+      throw new Error("El usuario no tiene productos registrados");
+    }
     return products;
   } catch (error) {
     throw new Error("No se pudo obtener los productos del usuario");
@@ -51,7 +53,9 @@ exports.getMyProductsById = async (idUser, idProduct) => {
       text: "SELECT * FROM products WHERE seller = $1 and id_product = $2",
       values: [idUser, idProduct]
     };
-
+    if (!product[0]) {
+      throw new Error("El producto no existe");
+    }
     const { rows: product } = await pool.query(query);
 
     return product[0];

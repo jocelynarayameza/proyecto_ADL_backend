@@ -7,7 +7,7 @@ exports.getProductsController = async (req, res) => {
     const products = await getProducts();
     res.json(products);
   } catch (error) {
-    res.status(500).json({ error: error.message, errormsg: "error en controller" });
+    res.status(500).json({ error: error.message, msg: "Error interno del servidor" });
   }
 };
 
@@ -15,9 +15,12 @@ exports.getProductByIdController = async (req, res) => {
   try {
     const id = req.params.id;
     const product = await getProductById(id);
+    if (!product) {
+      return res.status(404).json({ error: "Producto no encontrado" });
+    }
     res.json(product);
   } catch (error) {
-    res.status(500).json({ error: error.message, errormsg: "error en controller" });
+    res.status(500).json({ error: error.message, msg: "Error interno del servidor" });
   }
 };
 
@@ -28,7 +31,7 @@ exports.getMyProductsController = async (req, res) => {
     const products = await getMyProducts(userId);
     res.json(products);
   } catch (error) {
-    res.status(500).json({ error: error.message, errormsg: "error en controller" });
+    res.status(500).json({ error: error.message, msg: "Error interno del servidor" });
 
   }
 }
@@ -42,7 +45,7 @@ exports.getMyProductsByIdController = async (req, res) => {
     const productUser = await getMyProductsById(userId, productoId)
     res.json(productUser);
   } catch (error) {
-    res.status(500).json({ error: error.message, errormsg: "error en controller" });
+    res.status(500).json({ error: error.message, msg: "Error interno del servidor" });
 
   }
 }
@@ -53,14 +56,21 @@ exports.putMyProductsByIdController = async (req, res) => {
     const userId = user.id;
     const productoId = req.params.idProducto
     const productData = await getMyProductsById(userId, productoId)
-    const {product_name: prevName, product_description: prevDescription, product_price: prevPrice, product_quantity: prevQuantity, product_photo: prevPhoto, product_category: prevCategory} = productData
-    const { product_name, product_description, product_price, product_quantity,product_photo, product_category } = req.body;
+    const { product_name: prevName, product_description: prevDescription, product_price: prevPrice, product_quantity: prevQuantity, product_photo: prevPhoto, product_category: prevCategory } = productData
+    const { product_name, product_description, product_price, product_quantity, product_photo, product_category } = req.body;
+    if (product_price && isNaN(product_price)) {
+      return res.status(400).json({ error: "El precio debe ser un número válido" });
+    }
+
+    if (product_quantity && isNaN(product_quantity)) {
+      return res.status(400).json({ error: "La cantidad debe ser un número válido" });
+    }
     const updatedProduct = {
       product_name: product_name || prevName,
-      product_description: product_description || prevDescription,  
+      product_description: product_description || prevDescription,
       product_price: product_price || prevPrice,
       product_quantity: product_quantity || prevQuantity,
-      product_photo: product_photo || prevPhoto, 
+      product_photo: product_photo || prevPhoto,
       product_category: product_category || prevCategory
     }
 
@@ -68,7 +78,7 @@ exports.putMyProductsByIdController = async (req, res) => {
 
     res.json(productUser);
   } catch (error) {
-    res.status(500).json({ error: error.message, errormsg: "error en controller" });
+    res.status(500).json({ error: error.message, msg: "Error interno del servidor" });
 
   }
 }
@@ -81,21 +91,21 @@ exports.deleteMyProductsByIdController = async (req, res) => {
     const deletedProduct = await deleteMyProductsById(userId, productoId)
     res.json(deletedProduct);
   } catch (error) {
-    res.status(500).json({ error: error.message, errormsg: "error en controller" });
+    res.status(500).json({ error: error.message, msg: "Error interno del servidor" });
 
   }
 }
 
-exports.newProductController = async (req,res) => {
+exports.newProductController = async (req, res) => {
   try {
-    const {id_user} = await getUser(req)
-    
+    const { id_user } = await getUser(req)
+
     let { product_name, product_description, product_price, product_quantity, product_photo, product_category } = req.body
     await newProduct(product_name, product_description, product_price, product_quantity, product_photo, product_category, id_user)
-    res.status(201).json({msg:'Producto registrado satisfactoriamente'})
+    res.status(201).json({ msg: 'Producto registrado satisfactoriamente' })
 
   } catch (error) {
-     res.status(400).json({msg:"Fallo el agregar un nuevo producto"})
+    res.status(500).json({ error: error.message, msg: "Error interno del servidor" });
   }
-  
+
 }
