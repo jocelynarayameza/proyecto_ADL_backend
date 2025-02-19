@@ -75,7 +75,7 @@ exports.loginUsers = async(req,res) =>{
         res.status(401).json({msg:"Contrasena incorrecta"})
       } else {
         const token = jwt.sign(
-          {id: user.id_user,
+          {id_user: user.id_user,
             email: user.email,
             password: user.password,
             username:user.username,

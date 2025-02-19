@@ -15,13 +15,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 require('dotenv').config()
 
-app.use('/',routes);
 app.use('/api/usuarios',userRoutes);
 app.use('/api/carrito',cartRoutes);
 app.use('/api/pedidos',orderRoutes);
 app.use('/api/productos',productRoutes);
-
-
+app.use('/',routes);
 
 
 // app.use(errorHandler);

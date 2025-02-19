@@ -27,7 +27,7 @@ exports.getProductByIdController = async (req, res) => {
 exports.getMyProductsController = async (req, res) => {
   try {
     const user = req.user;
-    const userId = user.id;
+    const userId = user.id_user;
     const products = await getMyProducts(userId);
     res.json(products);
   } catch (error) {
@@ -40,9 +40,10 @@ exports.getMyProductsController = async (req, res) => {
 exports.getMyProductsByIdController = async (req, res) => {
   try {
     const user = req.user;
-    const userId = user.id;
+    const userId = user.id_user;
     const productoId = req.params.idProducto
     const productUser = await getMyProductsById(userId, productoId)
+    console.log(productUser)
     res.json(productUser);
   } catch (error) {
     res.status(500).json({ error: error.message, msg: "Error interno del servidor" });
@@ -53,7 +54,7 @@ exports.getMyProductsByIdController = async (req, res) => {
 exports.putMyProductsByIdController = async (req, res) => {
   try {
     const user = req.user;
-    const userId = user.id;
+    const userId = user.id_user;
     const productoId = req.params.idProducto
     const productData = await getMyProductsById(userId, productoId)
     const { product_name: prevName, product_description: prevDescription, product_price: prevPrice, product_quantity: prevQuantity, product_photo: prevPhoto, product_category: prevCategory } = productData
