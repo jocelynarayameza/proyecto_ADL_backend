@@ -22,7 +22,7 @@ try {
   res.status(200).send(cart);
 
 } catch (error) {
-  res.status(500).json({msg:"No se pudo obtener el carrito"})
+  res.status(500).json({msg:"No se pudo obtener el carrito", 'error': error.message})
 }
 }
 
@@ -76,7 +76,7 @@ exports.editProductInCartController = async(req,res) =>{
     } 
 
   } catch (error) {
-    res.status(500).send({msg:'No se pudo agregar o modificar producto del carrito'});
+    res.status(500).send({msg:'No se pudo agregar o modificar producto del carrito', 'error': error.message});
   }  
 }
 
@@ -105,13 +105,19 @@ exports.buyProductsToOrderController = async(req,res) =>{
       }
     }
   } catch (error) {
-    res.status(400).json({msg:"No se pudo comprar el carrito"});
+    res.status(400).json({msg:"No se pudo comprar el carrito", 'error': error.message});
   } 
 }
 
 exports.deleteCartController = async (req,res) =>{
-  let { id_user } = await getUser(req);
-  await deleteTotalCart(id_user);
-  res.status(200).json({msg:"Carrito fue vaciado con éxito"})
+  try {
+    let { id_user } = await getUser(req);
+    await deleteTotalCart(id_user);
+    res.status(200).json({msg:"Carrito fue vaciado con éxito"})
+
+  } catch (error) {
+    res.status(500).send({msg:'No se pudo vaciar el carrito', 'error': error.message});
+  }
+
 }
 

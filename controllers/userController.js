@@ -29,7 +29,7 @@ exports.getUsers = async(req,res) => {
   );
 
   } catch (error) {
-    res.status(500).json({msg: error.message});
+    res.status(500).json({msg: "No se encontro usuario", 'error': error.message});
   }
 };
 
@@ -61,7 +61,7 @@ exports.registerUsers = async(req,res) => {
     }
 
   } catch (error) {
-    res.status(500).json({msg:'No se pudo registrar nuevo usuario'})
+    res.status(500).json({msg:'No se pudo registrar nuevo usuario', 'error': error.message})
   }
 }
 
@@ -80,7 +80,7 @@ exports.loginUsers = async(req,res) =>{
       res.status(401).json({msg:"Contraseña incorrecta"})
     } else {
       const token = jwt.sign(
-        {id: user.id_user,
+        {id_user: user.id_user,
           email: user.email,
           password: user.password,
           username:user.username,
@@ -97,7 +97,7 @@ exports.loginUsers = async(req,res) =>{
     }
     
   } catch (error) {  
-    res.status(500).json({msg:"No se pudo autenticar"})
+    res.status(500).json({msg:"No se pudo autenticar", 'error': error.message})
   }
 }
 
@@ -149,7 +149,7 @@ exports.editUsers = async (req,res) =>{
     res.status(200).json({msg:"El usuario se modificó con éxito"})
 
   } catch (error) {
-    res.status(500).json({msg:'No se pudo modificar el usuario'})
+    res.status(500).json({msg:'No se pudo modificar el usuario', 'error': error.message})
   }
 }
 
@@ -171,7 +171,7 @@ exports.editAddressUsers = async (req,res) =>{
     res.status(200).json({msg:"La dirección se modificó con éxito"})
 
   } catch (error) {
-    res.status(500).json({msg:'No se pudo modificar la dirección del usuario'})
+    res.status(500).json({msg:'No se pudo modificar la dirección del usuario', 'error': error.message})
   }
 }
 
@@ -182,7 +182,7 @@ exports.logout = async(req,res) =>{
     const Authorization = req.header("Authorization")
     const token = Authorization.split("Bearer ")[1]
     await tokenIDRemove(token)
-    res.status(200).json({msg:"El usuario se deslogueó con éxito"})
+    res.status(200).json({msg:"El usuario cerró sesión con éxito"})
 
   } catch (error) {
     res.status(500).json({msg:'No se pudo desloguear al usuario'})
@@ -192,16 +192,28 @@ exports.logout = async(req,res) =>{
 
 exports.deleteUsers = async(req,res) => {
   try {
+    // const token = req.headers['authorization']?.split(' ')[1]; 
+    
+    // if (!token) {
+    //   return res.status(401).json({ msg: 'No se proporcionó token' });
+    // }
+    // const decoded = jwt.decode(token);
+
+    // if (!decoded || !decoded.id_user) {
+    //   return res.status(401).json({ msg: 'Token inválido o no contiene id_user' });
+    // }
+
+    // const{ id_user } = jwt.decode(token);
     const { id_user } = await getUser(req)
     let deleteUserConfirm = await deleteUser(id_user);
-  
-    if(deleteUserConfirm){
-     return res.status(200).json({msg:"El usuario se eliminó con éxito"})
+
+    if (deleteUserConfirm) {
+      return res.status(200).json({ msg: 'El usuario se eliminó con éxito' });
     }
 
-  res.status(404).json({ msg: 'No se encontró el usuario para eliminar' });
+    return res.status(404).json({ msg: 'No se encontró el usuario para eliminar' });
 
   } catch (error) {
-    res.status(500).json({msg:'No se pudo eliminar el usuario'})
+    res.status(500).json({msg:'No se pudo eliminar el usuario', 'error': error.message})
   }
 }

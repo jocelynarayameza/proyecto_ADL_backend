@@ -3,6 +3,7 @@ const jwt=require('jsonwebtoken');
 
 exports.getUser = async (req,res) =>{
   try {
+    
     const Authorization = req.header("Authorization")
     const token = Authorization.split("Bearer ")[1]
     const {email} = jwt.decode(token)
