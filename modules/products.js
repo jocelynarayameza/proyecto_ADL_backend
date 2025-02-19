@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken');
 exports.getProducts = async () => {
   try {
     const { rows: products } = await pool.query("SELECT * FROM products");
-    console.log(products);
     return products
 
   } catch (error) {
@@ -20,6 +19,7 @@ exports.getProductById = async (id) => {
     };
     const { rows: product } = await pool.query(query);
 
+    
       return product[0];
       
     } catch (error) {
@@ -53,10 +53,11 @@ exports.getMyProductsById = async (idUser, idProduct) => {
       text: "SELECT * FROM products WHERE seller = $1 and id_product = $2",
       values: [idUser, idProduct]
     };
+
+    const { rows: product } = await pool.query(query);
     if (!product[0]) {
       throw new Error("El producto no existe");
     }
-    const { rows: product } = await pool.query(query);
 
     return product[0];
   } catch (error) {
