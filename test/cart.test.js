@@ -35,7 +35,7 @@ describe ("Operaciones CRUD del carrito", () =>{
   })
   test("Error al agregar un producto al carrito con cantidad >1", async () => {
     const product = {
-      "id_product": 6,
+      "id_product": 7,
       "total_quantity": 10
   };
 
@@ -45,6 +45,9 @@ describe ("Operaciones CRUD del carrito", () =>{
       .set("Authorization",`Bearer ${token}`) 
       .set("Content-Type", "application/json")
       .set("Accept", "application/json");
+
+      console.log(response.body.msg);
+      
 
     expect(response.body.msg).toBe("Tienes que añadir el producto primero")
 });
