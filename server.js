@@ -8,7 +8,6 @@ const cartRoutes = require('./routes/cartRoutes')
 
 const orderRoutes = require('./routes/orderRoutes')
 const productRoutes = require('./routes/productRoutes')
-const errorHandler = require('./middlewares/corsMiddleware')
 
 app.use(cors())
 app.use(express.json());
@@ -21,9 +20,6 @@ app.use('/api/carrito',cartRoutes);
 app.use('/api/pedidos',orderRoutes);
 app.use('/api/productos',productRoutes);
 app.use('/',routes);
-
-
-// app.use(errorHandler);
 
 const PORT = process.env.PORT ||3000
 

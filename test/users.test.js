@@ -44,11 +44,10 @@ describe("Operaciones CRUD de usuario", () => {
       .set('Accept', 'application/json');
 
     expect(response.status).toBe(200);
-    token = response.body.token; // Guardamos el token recibido
+    token = response.body.token; 
     const decoded = jwt.decode(token);
     id_user = decoded.id_user;
-    // Extraemos id_user del token
-    expect(id_user).toBeDefined(); // Aseguramos que el id_user está presente
+    expect(id_user).toBeDefined(); 
   });
 
 
@@ -85,24 +84,4 @@ describe("Operaciones CRUD de usuario", () => {
     expect(response.status).toBe(401)
     expect(response.body.msg).toBe('Contraseña incorrecta'); 
   });
-
-
-  // test("Eliminar a un usuario con status 200", async () => {
-    
-  //   if (!token || !id_user) {
-  //     throw new Error("Token o id_user no disponible para la prueba");
-  //   }
-
-  //   const response = await request(app)
-  //   .post("/usuarios/eliminar")
-  //   .set('Authorization', `Bearer ${token}`) 
-  //   .set('Content-Type', 'application/json')
-  //   .set('Accept', 'application/json')
-
-  //   console.log("Response body:", response.body); 
-  //   console.log("Response status:", response.status);
-  
-  //   expect(response.status).toBe(200); 
-  //   expect(response.body.msg).toBe('El usuario se eliminó con éxito'); 
-  // })
 });
