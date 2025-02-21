@@ -75,6 +75,7 @@ exports.putMyProductsByIdController = async (req, res) => {
     
     const { product_name: prevName, product_description: prevDescription, product_price: prevPrice, product_quantity: prevQuantity, product_photo: prevPhoto, product_category: prevCategory } = productData
     const { product_name, product_description, product_price, product_quantity, product_photo, product_category } = req.body;
+
     if (product_price && isNaN(product_price)) {
       return res.status(400).json({ error: "El precio debe ser un número válido" });
     }
@@ -82,6 +83,7 @@ exports.putMyProductsByIdController = async (req, res) => {
     if (product_quantity && isNaN(product_quantity)) {
       return res.status(400).json({ error: "La cantidad debe ser un número válido" });
     }
+    
     const updatedProduct = {
       product_name: product_name || prevName,
       product_description: product_description || prevDescription,

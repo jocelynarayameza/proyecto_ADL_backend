@@ -17,10 +17,11 @@ describe("Operaciones CRUD de pedidos", () => {
         const loginResponse = await request(app)
             .post("/usuarios/iniciar-sesion") 
             .send({
-                email: "vivi@tienda.cl", 
+                email: "test@tienda.cl", 
                 password: "12341234"
             });
         token = loginResponse.body.token; 
+        
     });
     test("Debería obtener los pedidos del usuario ", async () => {
         

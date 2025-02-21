@@ -78,9 +78,6 @@ exports.loginUsers = async(req,res) =>{
 
     if(!bcrypt.compareSync(password,user.password)){
       res.status(401).json({msg:"Contraseña incorrecta"})
-    } else {
-      if(!bcrypt.compareSync(password,user.password)){
-        res.status(401).json({msg:"Contrasena incorrecta"})
       } else {
         const token = jwt.sign(
           {id_user: user.id_user,
@@ -96,9 +93,9 @@ exports.loginUsers = async(req,res) =>{
             {jwtid: crypto.randomUUID().toString() }
         )
         await tokenIDAdd(token);
-        res.status(200).json({msg:'Autentificacion correcta','token':token})
+        res.status(200).json({msg:'Autentificación correcta','token':token})
       }
-    }
+  
     
   } catch (error) {  
     res.status(500).json({msg:"No se pudo autenticar", 'error': error.message})

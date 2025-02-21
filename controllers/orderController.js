@@ -4,7 +4,7 @@ const {getOrders, getOrderById} = require('../modules/orders.js')
 exports.getOrdersController = async (req, res) => {
     try {
     const user = req.user;
-    const userId = user.id_user;
+    const userId = user.id_user; 
     const orders = await getOrders(userId);
     res.json(orders);
     } catch (error) {
