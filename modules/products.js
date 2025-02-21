@@ -1,15 +1,66 @@
 const pool = require('../config/database');
-const jwt = require('jsonwebtoken');
+const format = require("pg-format")
 
-exports.getProducts = async () => {
+const obtenerTotal = async() => {
+  const {rows} = await pool.query("SELECT COUNT (*) FROM products");
+  return parseInt(rows[0].count)
+}
+exports.getProducts = async ({limits = 5, page = 1}) => {
   try {
-    const { rows: products } = await pool.query("SELECT * FROM products");
-    return products
+    const offset = Math.abs((page - 1) * limits ) ;
+    const formatted = format("SELECT * FROM products LIMIT %s OFFSET %s", limits, offset)
+    const {rows} = await pool.query(formatted) 
+    const total = await obtenerTotal() 
+    return HATEOASFormat(rows, total)
 
   } catch (error) {
-    throw new Error("No se pudo obtener los productos get products");
+    throw new Error("No se pudo obtener los productos");
   }
 }
+
+exports.filters = async ({precio_min, precio_max, categoria}) => {
+    let filtros = [];
+    let values = [];
+    const agregar = (campo, comparador, valor) => {
+        values.push(valor)
+        const { length } = filtros
+        filtros.push(`${campo} ${comparador} $${length + 1}`)
+        }
+    if(precio_min){
+        agregar("product_price", ">=", precio_min)
+    }
+    if(precio_max){
+        agregar("product_price", "<=", precio_max)
+    }
+    if(categoria){
+        agregar("product_category", "=", categoria)
+    }
+    let text = "SELECT * FROM products";
+
+    if (filtros.length > 0) {
+        filtros = filtros.join(" AND ")
+        text += ` WHERE ${filtros}`
+        }
+    let result = await pool.query(text, values)
+    return result.rows 
+
+}
+
+const HATEOASFormat = (array_products, total) => {
+    const products = array_products.map((product) => ({
+        name: product.product_name,
+        href: `/api/productos/${product.id_product}`            
+        
+    }))
+    const resProducts = {
+        "total": total,
+        "results": products
+    }
+    return resProducts
+}
+
+
+
 
 exports.getProductById = async (id) => {
   try {
