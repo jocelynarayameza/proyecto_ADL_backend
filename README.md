@@ -5,7 +5,7 @@ Integrantes: Jocelyn Araya y Millaray Painemil
 ## Instalación
 
 ```bash
-npm i express pg jest supertest jsonwebtoken dotend bcrypt cors 
+npm i express pg jest supertest jsonwebtoken dotenv bcrypt cors 
 ```
 En el archivo Script-18.sql está la configuración de las tablas a ocupar en PostgreSQL.
 
